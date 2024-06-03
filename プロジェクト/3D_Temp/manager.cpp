@@ -147,6 +147,7 @@ void CManager::Update()
 {
 	//XVˆ—
 	m_pRenderer->Update();
+	m_pCamera->Update();
 	m_pKeyboard->Update();
 	CObject::UpdateAll();
 }

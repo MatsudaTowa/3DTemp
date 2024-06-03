@@ -20,6 +20,13 @@ public:
 	void Update();
 	void SetCamera();
 private:
+	static const float DEFAULT_MOVE; //通常時の移動
+	static const float DAMPING_COEFFICIENT; //移動抵抗
+
+	void CameraMove(); //カメラ移動処理
+
+	void CameraTurn(); //カメラ回転処理
+
 	D3DXVECTOR3 m_posV; //視点
 	D3DXVECTOR3 m_posR; //注視点
 
