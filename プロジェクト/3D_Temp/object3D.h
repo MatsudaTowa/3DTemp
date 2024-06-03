@@ -1,27 +1,27 @@
 //=============================================
 //
-//3DTemplate[object2D.h]
+//3DTemplate[object3D.h]
 //Auther Matsuda Towa
 //
 //=============================================
-#ifndef _OBJECT2D_H_ //これが定義されてないとき
+#ifndef _OBJECT3D_H_ //これが定義されてないとき
 
-#define _OBJECT2D_H_
+#define _OBJECT3D_H_
 #include "main.h"
 #include "object.h"
 
 //2Dオブジェクトクラス
-class CObject2D : public CObject
+class CObject3D : public CObject
 {
 public:
-	CObject2D(int nPriority = 3);
-	~CObject2D()override;
+	CObject3D(int nPriority = 3);
+	~CObject3D()override;
 	HRESULT Init()override;
 	void Uninit()override;
 	void Update()override;
 	void Draw()override;
 
-	static CObject2D*Create(D3DXVECTOR3 pos,D3DXVECTOR2 size); //オブジェクト作成
+	static CObject3D* Create(D3DXVECTOR3 pos, D3DXVECTOR2 size); //オブジェクト作成
 	void BindTexture(LPDIRECT3DTEXTURE9 pTex);
 
 	//posの代入
@@ -49,12 +49,7 @@ public:
 	}
 
 	//頂点座標の代入
-	void SetVtx(float rhw, D3DCOLOR col);
-
-	//頂点座標(拡縮、回転)の代入
-	void SetVtx(float rhw, D3DCOLOR col,float fAngle,float fLength);
-
-	void SetVtx_FootPos(float rhw, D3DCOLOR col,float fAngle,float fLength);
+	void SetVtx(D3DXVECTOR3 nor, D3DCOLOR col);
 
 	//posの取得
 	D3DXVECTOR3& GetPos();
@@ -68,6 +63,7 @@ public:
 	//テクスチャ座標の取得
 	D3DXVECTOR2& GetTexPos();
 
+	//頂点情報取得
 	LPDIRECT3DVERTEXBUFFER9& GetVtxBuff();
 
 private:
@@ -81,5 +77,6 @@ private:
 	D3DXVECTOR2 m_size;
 	D3DXVECTOR2 m_tex_pos; //tex座標
 
+	D3DXMATRIX m_mtxWorld; //ワールドマトリックス
 };
 #endif

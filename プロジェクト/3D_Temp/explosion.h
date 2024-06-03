@@ -1,6 +1,6 @@
 //=============================================
 //
-//2DTemplate[explosion.h]
+//3DTemplate[explosion.h]
 //Auther Matsuda Towa
 //
 //=============================================

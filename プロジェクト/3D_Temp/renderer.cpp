@@ -1,6 +1,6 @@
 //=============================================
 //
-//2DTemplate[renderer.cpp]
+//3DTemplate[renderer.cpp]
 //Auther Matsuda Towa
 //
 //=============================================

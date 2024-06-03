@@ -1,6 +1,6 @@
 //=============================================
 //
-//2DTemplate[move_texture.cpp]
+//3DTemplate[move_texture.cpp]
 //Auther Matsuda Towa
 //
 //=============================================

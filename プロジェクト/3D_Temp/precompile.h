@@ -18,6 +18,7 @@
 #define WORLD_WIDTH	(111280) //ウィンドウの幅
 #define WORLD_HEIGHT	(1440) //ウィンドウの高さ
 #define FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE |D3DFVF_TEX1) //座標とカラーとテクスチャ
+#define FVF_VERTEX_3D	(D3DFVF_XYZ |D3DFVF_NORMAL| D3DFVF_DIFFUSE |D3DFVF_TEX1) //座標とカラーとテクスチャ
 
 
 #endif // PRECOMPILE_H_
