@@ -33,7 +33,7 @@ CCamera::~CCamera()
 //=============================================
 HRESULT CCamera::Init()
 {
-	m_posV = D3DXVECTOR3(0.0f, 100.0f, 200.0f); //視点
+	m_posV = D3DXVECTOR3(0.0f, 100.0f, -200.0f); //視点
 	m_posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f); //注視
 
 	m_vecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f); //上方向ベクトル
@@ -152,19 +152,19 @@ void CCamera::CameraMove()
 
 	if (pKeyboard->GetPress(DIK_I))
 	{
-		vecDirection.z -= 1.0f;
+		vecDirection.z += 1.0f;
 	}
 	if (pKeyboard->GetPress(DIK_K))
 	{
-		vecDirection.z += 1.0f;
+		vecDirection.z -= 1.0f;
 	}
 	if (pKeyboard->GetPress(DIK_J))
 	{
-		vecDirection.x += 1.0f;
+		vecDirection.x -= 1.0f;
 	}
 	if (pKeyboard->GetPress(DIK_L))
 	{
-		vecDirection.x -= 1.0f;
+		vecDirection.x += 1.0f;
 	}
 	if (vecDirection.x == 0.0f && vecDirection.z == 0.0f)
 	{ // 動いてない。

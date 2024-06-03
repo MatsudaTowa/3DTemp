@@ -16,6 +16,7 @@
 #include "effect.h"
 #include "enemy.h"
 #include "block.h"
+#include "field.h"
 
 //ÉåÉìÉ_ÉâÅ[ê›íË
 CRenderer*CManager::m_pRenderer = nullptr;
@@ -91,6 +92,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	CBlock::Load();
 
+	CField::Load();
+
 	////îwåiê∂ê¨
 	//CBg* pBg = CBg::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0));
 
@@ -102,11 +105,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	//CBlock* pBlock = CBlock::Create(CBlock::BLOCKTYPE_FIELD,D3DXVECTOR3(SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT,0.0f),
 	//								D3DXVECTOR2(SCREEN_WIDTH * 0.5f,100.0f),3,false);
-	//CObject2D* pObject2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 0.0f, SCREEN_HEIGHT * 0.5f)
-	//	, D3DXVECTOR2(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f));
-
-	CObject3D* pObject3D = CObject3D::Create(D3DXVECTOR3(0.0f,0.0f,0.0f)
-									, D3DXVECTOR3(100.0f, 0.0f, 100.0f));
+	
+	CField*pField = CField::Create(D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXVECTOR3(100.0f,0.0f,100.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
 
 	return S_OK;
 }
@@ -127,6 +127,7 @@ void CManager::Uninit()
 
 	CBlock::UnLoad();
 
+	CField::UnLoad();
 
 	CObject::ReleaseAll();
 	if (m_pRenderer != nullptr)
