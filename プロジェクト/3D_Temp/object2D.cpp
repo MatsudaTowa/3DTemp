@@ -101,8 +101,7 @@ void CObject2D::Draw()
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
-
-	//テクスチャの設定s
+	//テクスチャの設定
 	pDevice->SetTexture(0,m_pTexture);
 	//テクスチャ拡大時に色を近似値にする
 	pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
@@ -114,7 +113,6 @@ void CObject2D::Draw()
 
 	//テクスチャ拡大時の色を線形補間
 	pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-
 
 }
 
@@ -145,7 +143,6 @@ void CObject2D::SetVtx(float rhw, D3DCOLOR col)
 	if (m_pVtxBuff == nullptr)
 	{
 		pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX_2D, D3DPOOL_MANAGED, &m_pVtxBuff, NULL);
-
 	}
 	VERTEX_2D* pVtx;
 	//頂点バッファをロックし頂点情報へのポインタを取得

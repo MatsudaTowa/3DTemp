@@ -12,7 +12,7 @@
 //=============================================
 //コンストラクタ
 //=============================================
-CObject3D::CObject3D(int nPriority)
+CObject3D::CObject3D(int nPriority):CObject(nPriority)
 {
 	m_pTexture = nullptr;
 	m_pVtxBuff = nullptr;
@@ -50,7 +50,7 @@ HRESULT CObject3D::Init()
 	//アンロック
 	m_pVtxBuff->Unlock();
 
-	SetVtx(D3DXVECTOR3(0.0f,0.0f,0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	SetVtx(D3DXVECTOR3(0.0f,1.0f,0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
 	return S_OK;
 }
@@ -128,14 +128,13 @@ void CObject3D::Draw()
 //=============================================
 //生成
 //=============================================
-CObject3D* CObject3D::Create(D3DXVECTOR3 pos, D3DXVECTOR2 size)
+CObject3D* CObject3D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 {
 	CObject3D* pObject3D = new CObject3D;
 	if (pObject3D != nullptr)
 	{
 		pObject3D->m_pos = pos;
-		pObject3D->m_size.x = size.x;
-		pObject3D->m_size.y = size.y;
+		pObject3D->m_size = size;
 		pObject3D->Init();
 	}
 	return pObject3D;
@@ -168,17 +167,17 @@ void CObject3D::SetVtx(D3DXVECTOR3 nor, D3DCOLOR col)
 
 	//頂点座標の設定
 	pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x
-		, m_pos.y - m_size.y
-		, 0.0f);
+		, 0.0f
+		, m_pos.z + m_size.z);
 	pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_size.x
-		, m_pos.y - m_size.y
-		, 0.0f);
+		, 0.0f
+		, m_pos.z + m_size.z);
 	pVtx[2].pos = D3DXVECTOR3(m_pos.x - m_size.x
-		, m_pos.y + m_size.y
-		, 0.0f);
+		, 0.0f
+		, m_pos.z - m_size.z);
 	pVtx[3].pos = D3DXVECTOR3(m_pos.x + m_size.x
-		, m_pos.y + m_size.y
-		, 0.0f);
+		, 0.0f
+		, m_pos.z - m_size.z);
 
 	//rhwの設定
 	pVtx[0].nor = nor;
@@ -221,7 +220,7 @@ D3DXVECTOR3& CObject3D::GetRot()
 //=============================================
 //サイズ取得
 //=============================================
-D3DXVECTOR2& CObject3D::GetSize()
+D3DXVECTOR3& CObject3D::GetSize()
 {
 	return m_size;
 }

@@ -6,6 +6,7 @@
 //=============================================
 #include "object.h"
 #include "object2D.h"
+#include "object3D.h"
 
 //‘”‰Šú‰»
 int CObject::m_nNumAll = 0;

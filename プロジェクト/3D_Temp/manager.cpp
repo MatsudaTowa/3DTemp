@@ -8,6 +8,7 @@
 #include "renderer.h"
 #include "object.h"
 #include "object2D.h"
+#include "object3D.h"
 #include "player.h"
 #include "bg.h"
 #include "bullet.h"
@@ -15,9 +16,18 @@
 #include "effect.h"
 #include "enemy.h"
 #include "block.h"
+
 //レンダラー設定
 CRenderer*CManager::m_pRenderer = nullptr;
+
+//キーボード設定
 CInputKeyboard*CManager::m_pKeyboard = nullptr;
+
+//カメラ設定
+CCamera*CManager::m_pCamera = nullptr;
+
+//ライト設定
+CLight*CManager::m_pLight = nullptr;
 
 //=============================================
 //コンストラクタ
@@ -55,6 +65,20 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 			return E_FAIL;
 		}
 	}
+
+	//カメラ生成
+	if (m_pCamera == nullptr)
+	{
+		m_pCamera = new CCamera();
+		m_pCamera->Init();
+	}
+
+	//ライト生成
+	if (m_pLight == nullptr)
+	{
+		m_pLight = new CLight();
+		m_pLight->Init();
+	}
 	
 	//読み込み
 	CBullet::Load();
@@ -67,20 +91,22 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	CBlock::Load();
 
-	//背景生成
-	CBg* pBg = CBg::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0));
+	////背景生成
+	//CBg* pBg = CBg::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0));
 
-	//プレイヤー生成
-	CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.25f, SCREEN_HEIGHT * 0.25f, 0.0f),D3DXVECTOR2(50.0f, 100.0f));
+	////プレイヤー生成
+	//CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.25f, SCREEN_HEIGHT * 0.25f, 0.0f),D3DXVECTOR2(50.0f, 100.0f));
 
-	CEnemy* pEnemy = CEnemy::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.25f, SCREEN_HEIGHT * 0.25f, 0.0f), 
-									D3DXVECTOR3(2.0f, 2.0f, 0.0f),D3DXVECTOR2(70.0f, 100.0f),1);
+	//CEnemy* pEnemy = CEnemy::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.25f, SCREEN_HEIGHT * 0.25f, 0.0f), 
+	//								D3DXVECTOR3(2.0f, 2.0f, 0.0f),D3DXVECTOR2(70.0f, 100.0f),1);
 
-	CBlock* pBlock = CBlock::Create(CBlock::BLOCKTYPE_FIELD,D3DXVECTOR3(SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT,0.0f),
-									D3DXVECTOR2(SCREEN_WIDTH * 0.5f,100.0f),3,false);
+	//CBlock* pBlock = CBlock::Create(CBlock::BLOCKTYPE_FIELD,D3DXVECTOR3(SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT,0.0f),
+	//								D3DXVECTOR2(SCREEN_WIDTH * 0.5f,100.0f),3,false);
+	//CObject2D* pObject2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 0.0f, SCREEN_HEIGHT * 0.5f)
+	//	, D3DXVECTOR2(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f));
 
-	pBlock = CBlock::Create(CBlock::BLOCKTYPE_BREAK, D3DXVECTOR3(300.0f, 300.0f, 0.0f),
-							D3DXVECTOR2(100.0f, 100.0f), 1, true);
+	CObject3D* pObject3D = CObject3D::Create(D3DXVECTOR3(0.0f,0.0f,0.0f)
+									, D3DXVECTOR3(100.0f, 0.0f, 100.0f));
 
 	return S_OK;
 }
@@ -132,15 +158,38 @@ void CManager::Draw()
 {
 	//描画処理
 	m_pRenderer->Draw();
+
 	//g_pRenderer->DrawFPS(nCntFPS);
 }
 
+//=============================================
+//レンダラー取得
+//=============================================
 CRenderer* CManager::GetRenderer()
 {
 	return m_pRenderer;
 }
 
+//=============================================
+//キーボード情報取得
+//=============================================
 CInputKeyboard* CManager::GetKeyboard()
 {
 	return m_pKeyboard;
+}
+
+//=============================================
+//カメラ取得
+//=============================================
+CCamera* CManager::GetCamera()
+{
+	return m_pCamera;
+}
+
+//=============================================
+//ライト取得
+//=============================================
+CLight* CManager::GetLight()
+{
+	return m_pLight;
 }

@@ -6,6 +6,7 @@
 //=============================================
 #include "renderer.h"
 #include "object.h"
+#include "manager.h"
 
 //=============================================
 //コンストラクタ
@@ -159,7 +160,9 @@ void CRenderer::Draw()
 	//描画開始
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
+		CManager::GetCamera()->SetCamera();
 		CObject::DrawAll();
+
 		m_pD3DDevice->EndScene();
 	}
 	//バックバッファとフロントバッファの入れ替え
