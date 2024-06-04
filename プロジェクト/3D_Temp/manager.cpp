@@ -9,6 +9,7 @@
 #include "object.h"
 #include "object2D.h"
 #include "object3D.h"
+#include "objectX.h"
 #include "player.h"
 #include "bg.h"
 #include "bullet.h"
@@ -107,6 +108,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	//								D3DXVECTOR2(SCREEN_WIDTH * 0.5f,100.0f),3,false);
 	
 	CField*pField = CField::Create(D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXVECTOR3(100.0f,0.0f,100.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
+
+	CObjectX*pObjectX = CObjectX::Create(D3DXVECTOR3(0.0f,0.5f,0.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
 
 	return S_OK;
 }
