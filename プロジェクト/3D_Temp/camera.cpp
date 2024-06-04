@@ -9,7 +9,7 @@
 #include "manager.h"
 
 //’Êí‚ÌˆÚ“®‘¬“x
-const float CCamera::DEFAULT_MOVE = 3.0f;
+const float CCamera::DEFAULT_MOVE = 1.0f;
 
 //’Êí‚ÌˆÚ“®‘¬“x
 const float CCamera::DAMPING_COEFFICIENT = 0.2f;

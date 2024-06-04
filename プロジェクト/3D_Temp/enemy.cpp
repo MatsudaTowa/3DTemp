@@ -21,6 +21,8 @@ const float CEnemy::DEFAULT_MOVE = 3.0f;
 //テクスチャ初期化
 LPDIRECT3DTEXTURE9 CEnemy::m_pTextureTemp = nullptr;
 
+
+
 //=============================================
 //コンストラクタ
 //=============================================

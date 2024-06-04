@@ -106,8 +106,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	//CEnemy* pEnemy = CEnemy::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.25f, SCREEN_HEIGHT * 0.25f, 0.0f), 
 	//								D3DXVECTOR3(2.0f, 2.0f, 0.0f),D3DXVECTOR2(70.0f, 100.0f),1);
 
-	//CBlock* pBlock = CBlock::Create(CBlock::BLOCKTYPE_FIELD,D3DXVECTOR3(SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT,0.0f),
-	//								D3DXVECTOR2(SCREEN_WIDTH * 0.5f,100.0f),3,false);
+	CBlock* pBlock = CBlock::Create(CBlock::BLOCKTYPE_DEFAULT,D3DXVECTOR3(0.0f,0.0f,0.0f),
+									D3DXVECTOR3(0.0f, 0.0f, 0.0f),3,false);
 	
 	CField*pField = CField::Create(D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXVECTOR3(100.0f,0.0f,100.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
 
