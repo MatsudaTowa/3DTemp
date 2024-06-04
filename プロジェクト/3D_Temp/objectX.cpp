@@ -15,6 +15,7 @@ CObjectX::CObjectX(int nPriority):CObject(nPriority)
 {
 	m_pBuffMat = nullptr;
 	m_pMesh = nullptr;
+
 	for (int nCnt = 0; nCnt < MAX_TEX; nCnt++)
 	{
 		m_pTexture[nCnt] = nullptr;
@@ -53,6 +54,7 @@ HRESULT CObjectX::Init()
 
 	D3DXMATERIAL* pMat; //マテリアルポインタ
 	pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
+
 	for (int nCntMat = 0; nCntMat < (int)m_dwNumMat; nCntMat++)
 	{
 

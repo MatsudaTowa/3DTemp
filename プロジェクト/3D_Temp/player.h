@@ -8,15 +8,11 @@
 
 #define _PLAYER_H_
 #include "main.h"
-#include "object2D.h"
-#include "move_texture.h"
-//レンダラークラス
-class CPlayer : public CMove_Texture
+#include "objectX.h"
+//プレイヤークラス
+class CPlayer : public CObjectX
 {
 public:
-	static const int TEX_SPLIT_X; //テクスチャの分割数
-	static const int TEX_SPLIT_Y; //テクスチャの分割数
-	static const int ANIMATION_FRAME; //アニメーションフレーム数
 	CPlayer(int nPriority = 4);
 	~CPlayer()override;
 	HRESULT Init()override;
@@ -25,7 +21,10 @@ public:
 	void Draw()override;
 
 	//プレイヤー作成
-	static CPlayer* Create(D3DXVECTOR3 pos, D3DXVECTOR2 size);
+	static CPlayer* Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);
+
+	static HRESULT Load(); //テクスチャのロード
+	static HRESULT UnLoad(); //テクスチャのアンロード
 private:
 	static const float DEFAULT_MOVE; //通常時の移動
 	static const float DAMPING_COEFFICIENT; //移動抵抗
@@ -38,7 +37,11 @@ private:
 	D3DXVECTOR3 m_move; //速度
 	D3DXVECTOR3 m_oldpos; //過去の位置
 	bool m_bSize; //サイズ変更するかどうか
-	float m_fLength; //対角線
-	float m_fAngle; //角度
+
+	static LPDIRECT3DTEXTURE9 m_pTextureTemp;
+
+	static LPD3DXMESH m_pMesh;
+	static 	LPD3DXBUFFER m_pBuffMat; //マテリアル情報
+	static	DWORD m_dwNumMat; //マテリアル数;
 };
 #endif

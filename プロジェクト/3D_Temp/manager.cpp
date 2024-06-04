@@ -95,6 +95,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	CField::Load();
 
+	CPlayer::Load();
+
 	////îwåiê∂ê¨
 	//CBg* pBg = CBg::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0));
 
@@ -109,7 +111,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	
 	CField*pField = CField::Create(D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXVECTOR3(100.0f,0.0f,100.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
 
-	CObjectX*pObjectX = CObjectX::Create(D3DXVECTOR3(0.0f,0.5f,0.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
+	CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f,0.5f,0.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
 
 	return S_OK;
 }
@@ -131,6 +133,8 @@ void CManager::Uninit()
 	CBlock::UnLoad();
 
 	CField::UnLoad();
+
+	CPlayer::UnLoad();
 
 	CObject::ReleaseAll();
 	if (m_pRenderer != nullptr)

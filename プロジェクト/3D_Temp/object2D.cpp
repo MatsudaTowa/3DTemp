@@ -91,7 +91,7 @@ void CObject2D::Update()
 //=============================================
 void CObject2D::Draw()
 {
-	CRenderer* pRender = CManager::GetRenderer();
+ 	CRenderer* pRender = CManager::GetRenderer();
 
 	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
 
