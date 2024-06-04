@@ -14,6 +14,8 @@
 class CObjectX : public CObject
 {
 public:
+	static const int MAX_TEX = 16; //テクスチャの数
+
 	CObjectX(int nPriority = 5);
 	~CObjectX()override;
 	HRESULT Init()override;
@@ -74,7 +76,7 @@ public:
 
 private:
 
-	LPDIRECT3DTEXTURE9 m_pTexture; //テクスチャへのポインタ
+	LPDIRECT3DTEXTURE9 m_pTexture[MAX_TEX]; //テクスチャへのポインタ
 
 	D3DXVECTOR3 m_pos;
 	D3DXVECTOR3 m_rot;

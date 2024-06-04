@@ -163,7 +163,7 @@ void CObject3D::SetVtx(D3DXVECTOR3 nor, D3DCOLOR col)
 	}
 	VERTEX_3D* pVtx;
 	//頂点バッファをロックし頂点情報へのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	m_pVtxBuff->Lock(0, 0, reinterpret_cast<void**>(&pVtx), 0);
 
 	//頂点座標の設定
 	pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x

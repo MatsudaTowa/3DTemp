@@ -15,7 +15,10 @@ CObjectX::CObjectX(int nPriority):CObject(nPriority)
 {
 	m_pBuffMat = nullptr;
 	m_pMesh = nullptr;
-	m_pTexture = nullptr;
+	for (int nCnt = 0; nCnt < MAX_TEX; nCnt++)
+	{
+		m_pTexture[nCnt] = nullptr;
+	}
 }
 
 //=============================================
@@ -36,7 +39,7 @@ HRESULT CObjectX::Init()
 	if (m_pBuffMat == nullptr && m_pMesh == nullptr)
 	{
 		//Xファイルの読み込み
-		D3DXLoadMeshFromX("data\\MODEL\\face.x",
+		D3DXLoadMeshFromX("data\\MODEL\\jihanki.x",
 			D3DXMESH_SYSTEMMEM,
 			pDevice,
 			NULL,
@@ -47,8 +50,22 @@ HRESULT CObjectX::Init()
 	}
 
 
+
 	D3DXMATERIAL* pMat; //マテリアルポインタ
 	pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
+	for (int nCntMat = 0; nCntMat < (int)m_dwNumMat; nCntMat++)
+	{
+
+		if (pMat[nCntMat].pTextureFilename != NULL)
+		{
+			//テクスチャの読み込み
+			D3DXCreateTextureFromFile(pDevice,
+				pMat[nCntMat].pTextureFilename,
+				&m_pTexture[nCntMat]
+			);
+		}
+		//m_tex.push_back(pT);
+	}
 
 	int nNumVtx; //頂点数
 	DWORD sizeFVF; //頂点フォーマットのサイズ
@@ -61,7 +78,7 @@ HRESULT CObjectX::Init()
 
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f); //モデルの初期位置
 	m_minpos = D3DXVECTOR3(100000.0f, 1000000.0f, 1000000.0f); //モデルの最小位置
-	m_maxpos = D3DXVECTOR3(-10000.0f, -1000000.0f, -100000.0f); //モデルの最大位置
+	m_maxpos = D3DXVECTOR3(-100000.0f, -1000000.0f, -100000.0f); //モデルの最大位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f); //初期の方向
 
 	//頂点バッファのロック
@@ -174,8 +191,8 @@ void CObjectX::Draw()
 		//マテリアルの設定
 		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
-		////テクスチャの設定
-		//pDevice->SetTexture(0, g_apTextureModel[m_nType][nCntMat]);
+		//テクスチャの設定
+		pDevice->SetTexture(0, m_pTexture[nCntMat]);
 
 		//パーツの設定
 		m_pMesh->DrawSubset(nCntMat);
@@ -210,7 +227,11 @@ CObjectX* CObjectX::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 //=============================================
 void CObjectX::BindTexture(LPDIRECT3DTEXTURE9 pTex)
 {
-	m_pTexture = pTex;
+	for (int nCnt = 0; nCnt < MAX_TEX; nCnt++)
+	{
+		m_pTexture[nCnt] = pTex;
+
+	}
 }
 
 //=============================================
@@ -223,36 +244,57 @@ void CObjectX::BindXFile(LPD3DXBUFFER pBuffMat, DWORD dwNumMat, LPD3DXMESH pMesh
 	m_pMesh = pMesh;
 }
 
+//=============================================
+//座標取得
+//=============================================
 D3DXVECTOR3& CObjectX::GetPos()
 {
 	return m_pos;
 }
 
+//=============================================
+//方向取得
+//=============================================
 D3DXVECTOR3& CObjectX::GetRot()
 {
 	return m_rot;
 }
 
+//=============================================
+//最小値取得
+//=============================================
 D3DXVECTOR3& CObjectX::GetMinPos()
 {
 	return m_minpos;
 }
 
+//=============================================
+//最大値取得
+//=============================================
 D3DXVECTOR3& CObjectX::GetMaxPos()
 {
 	return m_maxpos;
 }
 
+//=============================================
+//メッシュ情報取得
+//=============================================
 LPD3DXMESH& CObjectX::GetpMesh()
 {
 	return m_pMesh;
 }
 
+//=============================================
+//マテリアル情報取得
+//=============================================
 LPD3DXBUFFER& CObjectX::GetpBuffMat()
 {
 	return m_pBuffMat;
 }
 
+//=============================================
+//マテリアル数取得
+//=============================================
 DWORD& CObjectX::GetNumMat()
 {
 	return m_dwNumMat;
