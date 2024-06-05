@@ -9,7 +9,6 @@
 #define _CAMERA_H_
 #include "main.h"
 #include "input.h"
-
 class CCamera
 {
 public:
@@ -22,6 +21,8 @@ public:
 private:
 	static const float DEFAULT_MOVE; //’Êí‚ÌˆÚ“®
 	static const float DAMPING_COEFFICIENT; //ˆÚ“®’ïR
+	static const float DEFAULT_LENGTH_Y; //’Êíó‘Ô‚ÌY‚Ì‹——£
+	static const float DEFAULT_LENGTH_Z; //’Êíó‘Ô‚ÌZ‚Ì‹——£
 
 	void CameraMove(); //ƒJƒƒ‰ˆÚ“®ˆ—
 
