@@ -38,6 +38,63 @@ CBlock::~CBlock()
 //=============================================
 HRESULT CBlock::Init()
 {
+	int nNumVtx; //頂点数
+	DWORD sizeFVF; //頂点フォーマットのサイズ
+	BYTE* pVtxBuff; //頂点バッファのポインタ
+
+		//頂点数の取得
+	nNumVtx = m_pMesh->GetNumVertices();
+	//頂点フォーマットのサイズを取得
+	sizeFVF = D3DXGetFVFVertexSize(m_pMesh->GetFVF());
+
+	D3DXVECTOR3 minpos = GetMinPos();
+	D3DXVECTOR3 maxpos = GetMaxPos();
+
+	//頂点数の取得
+	nNumVtx = m_pMesh->GetNumVertices();
+
+	//頂点バッファのロック
+	m_pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
+
+	for (int nCntVtx = 0; nCntVtx < nNumVtx; nCntVtx++)
+	{
+		//頂点座標の代入
+		D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;
+
+		//x座標の最大値最小値チェック
+		if (vtx.x > maxpos.x)
+		{
+			maxpos.x = vtx.x;
+		}
+		if (vtx.x < minpos.x)
+		{
+			minpos.x = vtx.x;
+		}
+
+		//y座標の最大値最小値チェック
+		if (vtx.y > maxpos.y)
+		{
+			maxpos.y = vtx.y;
+		}
+		if (vtx.y < minpos.y)
+		{
+			minpos.y = vtx.y;
+		}
+
+		//z座標の最大値最小値チェック
+		if (vtx.z > maxpos.z)
+		{
+			maxpos.z = vtx.z;
+		}
+		if (vtx.z < minpos.z)
+		{
+			minpos.z = vtx.z;
+		}
+	}
+	m_pMesh->UnlockVertexBuffer();
+
+	SetMinPos(minpos);
+	SetMaxPos(maxpos);
 	return S_OK;
 }
 
@@ -145,15 +202,43 @@ HRESULT CBlock::UnLoad()
 //=============================================
 //当たり判定
 //=============================================
-void CBlock::HitBullet()
+void CBlock::HitBlock()
 {
-	D3DXVECTOR3 pos = GetPos();
-	m_nLife--;
-	if (m_nLife <= 0)
-	{
-		CExplosion* pExplosion = CExplosion::Create(pos, D3DXVECTOR2(50.0f, 50.0f));
-		Release();
-	}
+	//D3DXVECTOR3 pos = GetPos();
+
+	////サイズ取得
+	//D3DXVECTOR3 minpos = GetMinPos();
+	//D3DXVECTOR3 maxpos = GetMaxPos();
+
+	//for (int nCnt = 0; nCnt < MAX_OBJECT; nCnt++)
+	//{
+	//	//オブジェクト取得
+	//	CObject* pObj = CObject::Getobject(4, nCnt);
+	//	if (pObj != nullptr)
+	//	{//ヌルポインタじゃなければ
+	//		//タイプ取得
+	//		CObject::OBJECT_TYPE type = pObj->GetType();
+	//		if (type == CObject::OBJECT_TYPE::OBJECT_TYPE_PLAYER)
+	//		{
+	//			CPlayer* pPlayer = (CPlayer*)pObj;
+	//			pPlayer->GetPos(); //位置取得
+
+	//			//サイズ取得
+	//			pPlayer->GetMinPos();
+	//			pPlayer->GetMaxPos();
+	//			if (Bulletpos.x - Bulletsize.x >= pPlayer->GetPos().x - pPlayer->GetMinPos().x
+	//				&& Bulletpos.x + Bulletsize.x <= pPlayer->GetPos().x + pPlayer->GetMaxPos().x
+	//				&& Bulletpos.y - Bulletsize.y >= pPlayer->GetPos().z - pEnemy->GetSize().y
+	//				&& Bulletpos.y + Bulletsize.y <= pPlayer->GetPos().z + pEnemy->GetSize().y)
+	//			{//敵と弾が当たった時
+	//				pEnemy->HitBullet();
+	//				//弾の削除
+	//				Release();
+	//				CExplosion* pExplosion = CExplosion::Create(Bulletpos, D3DXVECTOR2(20.0f, 20.0f));
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 

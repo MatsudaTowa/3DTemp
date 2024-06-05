@@ -13,7 +13,7 @@
 class CPlayer : public CObjectX
 {
 public:
-	CPlayer(int nPriority = 4);
+	CPlayer(int nPriority = 8);
 	~CPlayer()override;
 	HRESULT Init()override;
 	void Uninit()override;

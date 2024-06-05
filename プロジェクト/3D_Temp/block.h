@@ -35,7 +35,7 @@ private:
 
 	BLOCKTYPE m_type;
 	bool m_bBreak; //‰ó‚¹‚é‚©‚Ç‚¤‚©
-	void HitBullet(); //’e‚Æ‚Ì“–‚½‚è”»’è
+	void HitBlock(); //” ‚Æ‚Ì“–‚½‚è”»’è
 	int m_nLife;
 	static LPDIRECT3DTEXTURE9 m_pTextureTemp;
 
