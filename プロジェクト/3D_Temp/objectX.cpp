@@ -244,6 +244,60 @@ void CObjectX::BindXFile(LPD3DXBUFFER pBuffMat, DWORD dwNumMat, LPD3DXMESH pMesh
 	m_pBuffMat = pBuffMat;
 	m_dwNumMat = dwNumMat;
 	m_pMesh = pMesh;
+	int nNumVtx; //頂点数
+	DWORD sizeFVF; //頂点フォーマットのサイズ
+	BYTE* pVtxBuff; //頂点バッファのポインタ
+
+		//頂点数の取得
+	nNumVtx = m_pMesh->GetNumVertices();
+	//頂点フォーマットのサイズを取得
+	sizeFVF = D3DXGetFVFVertexSize(m_pMesh->GetFVF());
+
+	m_minpos = D3DXVECTOR3(100000.0f, 1000000.0f, 1000000.0f); //モデルの最小位置
+	m_maxpos = D3DXVECTOR3(-100000.0f, -1000000.0f, -100000.0f); //モデルの最大位置
+
+	//頂点バッファのロック
+	m_pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
+	for (int nCntVtx = 0; nCntVtx < nNumVtx; nCntVtx++)
+	{
+		//頂点座標の代入
+		D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;
+
+		//x座標の最大値最小値チェック
+		if (vtx.x > m_maxpos.x)
+		{
+			m_maxpos.x = vtx.x;
+		}
+		if (vtx.x < m_minpos.x)
+		{
+			m_minpos.x = vtx.x;
+		}
+
+		//y座標の最大値最小値チェック
+		if (vtx.y > m_maxpos.y)
+		{
+			m_maxpos.y = vtx.y;
+		}
+		if (vtx.y < m_minpos.y)
+		{
+			m_minpos.y = vtx.y;
+		}
+
+		//z座標の最大値最小値チェック
+		if (vtx.z > m_maxpos.z)
+		{
+			m_maxpos.z = vtx.z;
+		}
+		if (vtx.z < m_minpos.z)
+		{
+			m_minpos.z = vtx.z;
+		}
+
+		// 次の頂点に進む
+		pVtxBuff += sizeFVF;
+	}
+
+	m_pMesh->UnlockVertexBuffer();
 }
 
 //=============================================
@@ -267,6 +321,48 @@ D3DXVECTOR3& CObjectX::GetRot()
 //=============================================
 D3DXVECTOR3& CObjectX::GetMinPos()
 {
+	int nNumVtx; //頂点数
+	DWORD sizeFVF; //頂点フォーマットのサイズ
+	BYTE* pVtxBuff; //頂点バッファのポインタ
+
+		//頂点数の取得
+	nNumVtx = m_pMesh->GetNumVertices();
+	//頂点フォーマットのサイズを取得
+	sizeFVF = D3DXGetFVFVertexSize(m_pMesh->GetFVF());
+
+	m_minpos = D3DXVECTOR3(100000.0f, 1000000.0f, 1000000.0f); //モデルの最小位置
+	m_maxpos = D3DXVECTOR3(-100000.0f, -1000000.0f, -100000.0f); //モデルの最大位置
+
+	//頂点バッファのロック
+	m_pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
+	for (int nCntVtx = 0; nCntVtx < nNumVtx; nCntVtx++)
+	{
+		//頂点座標の代入
+		D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;
+
+		//x座標の最小値チェック
+		if (vtx.x < m_minpos.x)
+		{
+			m_minpos.x = vtx.x;
+		}
+
+		//y座標の最小値チェック
+		if (vtx.y < m_minpos.y)
+		{
+			m_minpos.y = vtx.y;
+		}
+
+		//z座標の最小値チェック
+		if (vtx.z < m_minpos.z)
+		{
+			m_minpos.z = vtx.z;
+		}
+
+		// 次の頂点に進む
+		pVtxBuff += sizeFVF;
+	}
+
+	m_pMesh->UnlockVertexBuffer();
 	return m_minpos;
 }
 
@@ -275,6 +371,47 @@ D3DXVECTOR3& CObjectX::GetMinPos()
 //=============================================
 D3DXVECTOR3& CObjectX::GetMaxPos()
 {
+	int nNumVtx; //頂点数
+	DWORD sizeFVF; //頂点フォーマットのサイズ
+	BYTE* pVtxBuff; //頂点バッファのポインタ
+
+		//頂点数の取得
+	nNumVtx = m_pMesh->GetNumVertices();
+	//頂点フォーマットのサイズを取得
+	sizeFVF = D3DXGetFVFVertexSize(m_pMesh->GetFVF());
+
+	m_minpos = D3DXVECTOR3(100000.0f, 1000000.0f, 1000000.0f); //モデルの最小位置
+	m_maxpos = D3DXVECTOR3(-100000.0f, -1000000.0f, -100000.0f); //モデルの最大位置
+
+//頂点バッファのロック
+	m_pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
+	for (int nCntVtx = 0; nCntVtx < nNumVtx; nCntVtx++)
+	{
+		//頂点座標の代入
+		D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;
+
+		//x座標の最大値チェック
+		if (vtx.x > m_maxpos.x)
+		{
+			m_maxpos.x = vtx.x;
+		}
+
+		//y座標の最大値チェック
+		if (vtx.y > m_maxpos.y)
+		{
+			m_maxpos.y = vtx.y;
+		}
+
+		//z座標の最大値チェック
+		if (vtx.z > m_maxpos.z)
+		{
+			m_maxpos.z = vtx.z;
+		}
+		// 次の頂点に進む
+		pVtxBuff += sizeFVF;
+	}
+
+	m_pMesh->UnlockVertexBuffer();
 	return m_maxpos;
 }
 

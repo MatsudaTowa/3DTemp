@@ -111,7 +111,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	
 	CField*pField = CField::Create(D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXVECTOR3(100.0f,0.0f,100.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
 
-	CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f,0.5f,0.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
+	CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(50.0f,0.5f,0.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
 
 	return S_OK;
 }

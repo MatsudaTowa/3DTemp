@@ -11,9 +11,11 @@
 #include "block.h"
 
 //通常の移動速度
-const float CPlayer::DEFAULT_MOVE = 1.0f;
+const float CPlayer::DEFAULT_MOVE = 0.5f;
 //通常の移動速度
-const float CPlayer::DAMPING_COEFFICIENT = 0.2f;
+const float CPlayer::DAMPING_COEFFICIENT = 0.3f;
+//当たり判定補正値
+const float CPlayer::COLISION_CORRECTION = 15.0f;
 
 //テクスチャ初期化
 LPDIRECT3DTEXTURE9 CPlayer::m_pTextureTemp = nullptr;
@@ -54,63 +56,6 @@ HRESULT CPlayer::Init()
 
 	CObjectX::BindXFile(m_pBuffMat, m_dwNumMat, m_pMesh);
 
-	int nNumVtx; //頂点数
-	DWORD sizeFVF; //頂点フォーマットのサイズ
-	BYTE* pVtxBuff; //頂点バッファのポインタ
-
-		//頂点数の取得
-	nNumVtx = m_pMesh->GetNumVertices();
-	//頂点フォーマットのサイズを取得
-	sizeFVF = D3DXGetFVFVertexSize(m_pMesh->GetFVF());
-
-	D3DXVECTOR3 minpos = GetMinPos();
-	D3DXVECTOR3 maxpos = GetMaxPos();
-
-	//頂点数の取得
-	nNumVtx = m_pMesh->GetNumVertices();
-
-	//頂点バッファのロック
-	m_pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
-
-	for (int nCntVtx = 0; nCntVtx < nNumVtx; nCntVtx++)
-	{
-		//頂点座標の代入
-		D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;
-
-		//x座標の最大値最小値チェック
-		if (vtx.x > maxpos.x)
-		{
-			maxpos.x = vtx.x;
-		}
-		if (vtx.x < minpos.x)
-		{
-			minpos.x = vtx.x;
-		}
-
-		//y座標の最大値最小値チェック
-		if (vtx.y > maxpos.y)
-		{
-			maxpos.y = vtx.y;
-		}
-		if (vtx.y < minpos.y)
-		{
-			minpos.y = vtx.y;
-		}
-
-		//z座標の最大値最小値チェック
-		if (vtx.z > maxpos.z)
-		{
-			maxpos.z = vtx.z;
-		}
-		if (vtx.z < minpos.z)
-		{
-			minpos.z = vtx.z;
-		}
-	}
-	m_pMesh->UnlockVertexBuffer();
-
-	SetMinPos(minpos);
-	SetMaxPos(maxpos);
 
 	m_bSize = false;
 
@@ -148,63 +93,9 @@ void CPlayer::Update()
 	//座標を更新
 	SetPos(pos);
 
-	int nNumVtx; //頂点数
-	DWORD sizeFVF; //頂点フォーマットのサイズ
-	BYTE* pVtxBuff; //頂点バッファのポインタ
-
-		//頂点数の取得
-	nNumVtx = m_pMesh->GetNumVertices();
-	//頂点フォーマットのサイズを取得
-	sizeFVF = D3DXGetFVFVertexSize(m_pMesh->GetFVF());
-
 	D3DXVECTOR3 minpos = GetMinPos();
 	D3DXVECTOR3 maxpos = GetMaxPos();
 
-	//頂点数の取得
-	nNumVtx = m_pMesh->GetNumVertices();
-
-	//頂点バッファのロック
-	m_pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
-
-	for (int nCntVtx = 0; nCntVtx < nNumVtx; nCntVtx++)
-	{
-		//頂点座標の代入
-		D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;
-
-		//x座標の最大値最小値チェック
-		if (vtx.x > maxpos.x)
-		{
-			maxpos.x = vtx.x;
-		}
-		if (vtx.x < minpos.x)
-		{
-			minpos.x = vtx.x;
-		}
-
-		//y座標の最大値最小値チェック
-		if (vtx.y > maxpos.y)
-		{
-			maxpos.y = vtx.y;
-		}
-		if (vtx.y < minpos.y)
-		{
-			minpos.y = vtx.y;
-		}
-
-		//z座標の最大値最小値チェック
-		if (vtx.z > maxpos.z)
-		{
-			maxpos.z = vtx.z;
-		}
-		if (vtx.z < minpos.z)
-		{
-			minpos.z = vtx.z;
-		}
-	}
-	m_pMesh->UnlockVertexBuffer();
-
-	SetMinPos(minpos);
-	SetMaxPos(maxpos);
 	
 	HitBlock(m_oldpos);
 
@@ -268,7 +159,7 @@ HRESULT CPlayer::Load()
 	if (m_pBuffMat == nullptr && m_pMesh == nullptr)
 	{
 		//Xファイルの読み込み
-		D3DXLoadMeshFromX("data\\MODEL\\face.x",
+		D3DXLoadMeshFromX("data\\MODEL\\sphere.x",
 			D3DXMESH_SYSTEMMEM,
 			pDevice,
 			NULL,
@@ -407,61 +298,41 @@ void CPlayer::HitBlock(D3DXVECTOR3 oldpos)
 			{
 				CBlock* pBlock = (CBlock*)pObj;
 
-				if (oldpos.x - PlayerMin.x <= pBlock->GetPos().x + pBlock->GetMinPos().x
-					&& PlayerPos.x - PlayerMin.x >= pBlock->GetPos().x + pBlock->GetMinPos().x
-					&&oldpos.z - PlayerMin.z > pBlock->GetPos().z + pBlock->GetMaxPos().z
-					&& oldpos.z + PlayerMax.z < pBlock->GetPos().z - pBlock->GetMinPos().z
-)
-				{//横との当たり判定(プレイヤーから見て右)
-					PlayerPos.x = pBlock->GetPos().x + pBlock->GetMinPos().x + PlayerMin.x;
+				if (oldpos.x + PlayerMax.x <= pBlock->GetPos().x + pBlock->GetMinPos().x
+					&& PlayerPos.x + PlayerMax.x > pBlock->GetPos().x + pBlock->GetMinPos().x
+					&& PlayerPos.z + PlayerMax.z < pBlock->GetPos().z + pBlock->GetMaxPos().z + COLISION_CORRECTION
+					&& PlayerPos.z + PlayerMin.z > pBlock->GetPos().z + pBlock->GetMinPos().z - COLISION_CORRECTION)
+				{//当たり判定(X)
+					PlayerPos.x = oldpos.x;
 					m_move.x = 0.0f;
 				}
-				else if (oldpos.x + PlayerMax.x >= pBlock->GetPos().x - pBlock->GetMaxPos().x
-					&& PlayerPos.x + PlayerMax.x <= pBlock->GetPos().x - pBlock->GetMaxPos().x
-					&& oldpos.z - PlayerMin.z > pBlock->GetPos().z + pBlock->GetMaxPos().z
-					&& oldpos.z + PlayerMax.z < pBlock->GetPos().z - pBlock->GetMinPos().z
+				else if (oldpos.x + PlayerMin.x >= pBlock->GetPos().x + pBlock->GetMaxPos().x
+					&& PlayerPos.x + PlayerMin.x < pBlock->GetPos().x + pBlock->GetMaxPos().x
+					&& PlayerPos.z + PlayerMax.z < pBlock->GetPos().z + pBlock->GetMaxPos().z + COLISION_CORRECTION
+					&& PlayerPos.z + PlayerMin.z > pBlock->GetPos().z + pBlock->GetMinPos().z - COLISION_CORRECTION)
+				{//当たり判定(X)
+					PlayerPos.x = oldpos.x;
+					m_move.x = 0.0f;
+				}
+
+				if(oldpos.z + PlayerMax.z <= pBlock->GetPos().z + pBlock->GetMinPos().z
+					&& PlayerPos.z + PlayerMax.z > pBlock->GetPos().z + pBlock->GetMinPos().z
+					&& oldpos.x + PlayerMax.x < pBlock->GetPos().x + pBlock->GetMaxPos().x + COLISION_CORRECTION
+					&& oldpos.x + PlayerMin.x > pBlock->GetPos().x + pBlock->GetMinPos().x - COLISION_CORRECTION
 					)
-				{//横との当たり判定(プレイヤーから見て右)
-					PlayerPos.x = pBlock->GetPos().x - pBlock->GetMaxPos().x - PlayerMax.x;
-					m_move.x = 0.0f;
+				{//当たり判定(Z)
+					PlayerPos.z = oldpos.z;
+					m_move.z = 0.0f;
 				}
-//				else if (oldpos.x - PlayerMin.x >= pBlock->GetPos().x + pBlock->GetMaxPos().x
-//					&& PlayerPos.x - PlayerMin.x <= pBlock->GetPos().x + pBlock->GetMaxPos().x
-//					&& oldpos.z - PlayerMin.z < pBlock->GetPos().z + pBlock->GetMaxPos().z
-//					&& oldpos.z + PlayerMax.z > pBlock->GetPos().z - pBlock->GetMinPos().z)
-//				{//横との当たり判定(プレイヤーから見て左)
-//					PlayerPos.x = pBlock->GetPos().x + pBlock->GetMaxPos().x + PlayerMax.x;
-//					m_move.x = 0.0f;
-//
-//				}
-
-				//if(oldpos.z - PlayerMin.z <= pBlock->GetPos().z + pBlock->GetMinPos().z
-				//	&& PlayerPos.z - PlayerMin.z >= pBlock->GetPos().z + pBlock->GetMinPos().z
-				//	&& oldpos.x - PlayerMin.x > pBlock->GetPos().x + pBlock->GetMaxPos().x
-				//	&& oldpos.x + PlayerMax.x < pBlock->GetPos().x - pBlock->GetMinPos().x
-				//	)
-				//{//横との当たり判定(プレイヤーから見て右)
-				//	PlayerPos.z = pBlock->GetPos().z + pBlock->GetMinPos().z + PlayerMin.z;
-				//	m_move.z = 0.0f;
-				//}
-				//if()
-
-				//if (oldpos.y <= pBlock->GetPos().y - pBlock->GetSize().y
-				//	&& PlayerPos.y >= pBlock->GetPos().y - pBlock->GetSize().y
-				//	&& oldpos.x + PlayerSize.x > pBlock->GetPos().x - pBlock->GetSize().x
-				//	&& oldpos.x - PlayerSize.x < pBlock->GetPos().x + pBlock->GetSize().x)
-				//{//床
-				//	PlayerPos.y = pBlock->GetPos().y - pBlock->GetSize().y;
-				//	m_move.y = 0.0f;
-				//}
-				//else if (oldpos.y - PlayerSize.y >= pBlock->GetPos().y + pBlock->GetSize().y
-				//	&& PlayerPos.y - PlayerSize.y <= pBlock->GetPos().y + pBlock->GetSize().y
-				//	&& oldpos.x + PlayerSize.x > pBlock->GetPos().x - pBlock->GetSize().x
-				//	&& oldpos.x - PlayerSize.x < pBlock->GetPos().x + pBlock->GetSize().x)
-				//{//頭との当たり判定
-				//	PlayerPos.y = pBlock->GetPos().y + pBlock->GetSize().y + PlayerSize.y;
-				//	m_move.y = 0.0f;
-				//}
+				else if (oldpos.z + PlayerMin.z >= pBlock->GetPos().z + pBlock->GetMaxPos().z
+					&& PlayerPos.z + PlayerMin.z < pBlock->GetPos().z + pBlock->GetMaxPos().z
+					&& oldpos.x + PlayerMax.x < pBlock->GetPos().x + pBlock->GetMaxPos().x + COLISION_CORRECTION
+					&& oldpos.x + PlayerMin.x > pBlock->GetPos().x + pBlock->GetMinPos().x - COLISION_CORRECTION
+					)
+				{//当たり判定(Z)
+					PlayerPos.z = oldpos.z;
+					m_move.z = 0.0f;
+				}
 			}
 
 		}

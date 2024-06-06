@@ -12,7 +12,6 @@
 //テクスチャ初期化
 LPDIRECT3DTEXTURE9 CBlock::m_pTextureTemp = nullptr;
 
-
 LPD3DXBUFFER CBlock::m_pBuffMat = nullptr;
 
 LPD3DXMESH CBlock::m_pMesh = nullptr;
@@ -38,63 +37,7 @@ CBlock::~CBlock()
 //=============================================
 HRESULT CBlock::Init()
 {
-	int nNumVtx; //頂点数
-	DWORD sizeFVF; //頂点フォーマットのサイズ
-	BYTE* pVtxBuff; //頂点バッファのポインタ
-
-		//頂点数の取得
-	nNumVtx = m_pMesh->GetNumVertices();
-	//頂点フォーマットのサイズを取得
-	sizeFVF = D3DXGetFVFVertexSize(m_pMesh->GetFVF());
-
-	D3DXVECTOR3 minpos = GetMinPos();
-	D3DXVECTOR3 maxpos = GetMaxPos();
-
-	//頂点数の取得
-	nNumVtx = m_pMesh->GetNumVertices();
-
-	//頂点バッファのロック
-	m_pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
-
-	for (int nCntVtx = 0; nCntVtx < nNumVtx; nCntVtx++)
-	{
-		//頂点座標の代入
-		D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;
-
-		//x座標の最大値最小値チェック
-		if (vtx.x > maxpos.x)
-		{
-			maxpos.x = vtx.x;
-		}
-		if (vtx.x < minpos.x)
-		{
-			minpos.x = vtx.x;
-		}
-
-		//y座標の最大値最小値チェック
-		if (vtx.y > maxpos.y)
-		{
-			maxpos.y = vtx.y;
-		}
-		if (vtx.y < minpos.y)
-		{
-			minpos.y = vtx.y;
-		}
-
-		//z座標の最大値最小値チェック
-		if (vtx.z > maxpos.z)
-		{
-			maxpos.z = vtx.z;
-		}
-		if (vtx.z < minpos.z)
-		{
-			minpos.z = vtx.z;
-		}
-	}
-	m_pMesh->UnlockVertexBuffer();
-
-	SetMinPos(minpos);
-	SetMaxPos(maxpos);
+	
 	return S_OK;
 }
 

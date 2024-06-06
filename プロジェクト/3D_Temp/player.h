@@ -28,6 +28,7 @@ public:
 private:
 	static const float DEFAULT_MOVE; //通常時の移動
 	static const float DAMPING_COEFFICIENT; //移動抵抗
+	static const float COLISION_CORRECTION; //当たり判定補正値
 
 	void PlayerMove(); //プレイヤー移動処理
 	void Turn();	//回転処理
