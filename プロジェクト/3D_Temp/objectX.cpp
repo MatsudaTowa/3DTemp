@@ -241,9 +241,13 @@ void CObjectX::BindTexture(LPDIRECT3DTEXTURE9 pTex)
 //=============================================
 void CObjectX::BindXFile(LPD3DXBUFFER pBuffMat, DWORD dwNumMat, LPD3DXMESH pMesh)
 {
+	pBuffMat->AddRef();
+	pMesh->AddRef();
+
 	m_pBuffMat = pBuffMat;
 	m_dwNumMat = dwNumMat;
 	m_pMesh = pMesh;
+
 	int nNumVtx; //頂点数
 	DWORD sizeFVF; //頂点フォーマットのサイズ
 	BYTE* pVtxBuff; //頂点バッファのポインタ
