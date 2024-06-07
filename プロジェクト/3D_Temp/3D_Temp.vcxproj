@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bg.cpp" />
+    <ClCompile Include="billboard.cpp" />
     <ClCompile Include="block.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -179,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bg.h" />
+    <ClInclude Include="billboard.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />

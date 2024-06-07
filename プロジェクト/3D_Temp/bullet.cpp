@@ -55,7 +55,7 @@ void CBullet::Uninit()
 void CBullet::Update()
 {
 	D3DXVECTOR3 pos = GetPos();
-	CEffect*pEffect = CEffect::Create(pos, D3DXVECTOR2(20.0f, 20.0f),D3DXCOLOR(1.0f,0.0f,0.0f,0.5f),30);
+	//CEffect*pEffect = CEffect::Create(pos, D3DXVECTOR2(20.0f, 20.0f),D3DXCOLOR(1.0f,0.0f,0.0f,0.5f),30);
 	pos += m_move;
 	//ç¿ïWÇçXêV
 	SetPos(pos);

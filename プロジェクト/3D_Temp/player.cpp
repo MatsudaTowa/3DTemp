@@ -9,6 +9,7 @@
 #include "input.h"
 #include "bullet.h"
 #include "block.h"
+#include "effect.h"
 
 //通常の移動速度
 const float CPlayer::DEFAULT_MOVE = 0.5f;
@@ -87,6 +88,8 @@ void CPlayer::Update()
 	m_move *= 1.0f - DAMPING_COEFFICIENT;
 
 	m_oldpos = pos;
+
+	CEffect* pEffect = CEffect::Create(pos, D3DXVECTOR3(2000.0f, 0.0f ,2000.0f), D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f), 30);
 
 	pos += m_move;
 
@@ -289,7 +292,7 @@ void CPlayer::HitBlock(D3DXVECTOR3 oldpos)
 	for (int nCnt = 0; nCnt < MAX_OBJECT; nCnt++)
 	{
 		//オブジェクト取得
-		CObject* pObj = CObject::Getobject(1, nCnt);
+		CObject* pObj = CObject::Getobject(2, nCnt);
 		if (pObj != nullptr)
 		{//ヌルポインタじゃなければ
 			//タイプ取得
