@@ -21,7 +21,7 @@ public:
 		BLOCKTYPE_MAX,
 	}BLOCKTYPE;
 
-	CBlock(int nPriority = 1);
+	CBlock(int nPriority = 2);
 	~CBlock()override;
 	HRESULT Init()override;
 	void Uninit()override;
