@@ -202,6 +202,60 @@ void CObject3D::SetVtx(D3DXVECTOR3 nor, D3DCOLOR col)
 }
 
 //=============================================
+//頂点の設定(拡縮回転)
+//=============================================
+void CObject3D::SetVtx(D3DXVECTOR3 nor, float fAngle, float fLength, D3DCOLOR col)
+{
+	CRenderer* pRender = CManager::GetRenderer();
+
+	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
+	if (m_pVtxBuff == nullptr)
+	{
+		pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX_3D, D3DPOOL_MANAGED, &m_pVtxBuff, NULL);
+
+	}
+	VERTEX_3D* pVtx;
+	//頂点バッファをロックし頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, reinterpret_cast<void**>(&pVtx), 0);
+
+
+	//頂点座標の設定
+	pVtx[0].pos = D3DXVECTOR3(- m_size.x
+		, m_size.y
+		, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(m_size.x
+		, m_size.y
+		, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(- m_size.x
+		, - m_size.y
+		, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(m_size.x
+		, -m_size.y
+		, 0.0f);
+
+	//rhwの設定
+	pVtx[0].nor = nor;
+	pVtx[1].nor = nor;
+	pVtx[2].nor = nor;
+	pVtx[3].nor = nor;
+
+	//頂点カラーの設定
+	pVtx[0].col = col;
+	pVtx[1].col = col;
+	pVtx[2].col = col;
+	pVtx[3].col = col;
+
+	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+
+	//アンロック
+	m_pVtxBuff->Unlock();
+
+}
+
+//=============================================
 //座標取得
 //=============================================
 D3DXVECTOR3& CObject3D::GetPos()
@@ -233,7 +287,26 @@ D3DXVECTOR2& CObject3D::GetTexPos()
 	return m_tex_pos;
 }
 
+//=============================================
+//頂点情報取得
+//=============================================
 LPDIRECT3DVERTEXBUFFER9& CObject3D::GetVtxBuff()
 {
 	return m_pVtxBuff;
+}
+
+//=============================================
+//テクスチャ情報取得
+//=============================================
+LPDIRECT3DTEXTURE9& CObject3D::GetTexture()
+{
+	return m_pTexture;
+}
+
+//=============================================
+//ワールドマトリックス取得
+//=============================================
+D3DXMATRIX& CObject3D::GetMtxWorld()
+{
+	return m_mtxWorld;
 }

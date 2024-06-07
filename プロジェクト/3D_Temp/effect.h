@@ -8,10 +8,10 @@
 
 #define _EFFECT_H_
 #include "main.h"
-#include "object2D.h"
+#include "billboard.h"
 #include "move_texture.h"
 
-class CEffect : public CMove_Texture
+class CEffect : public CBillboard
 {
 public:
 	static const int TEX_SPLIT_X; //テクスチャの分割数
@@ -23,8 +23,9 @@ public:
 	void Uninit()override;
 	void Update()override;
 	void Draw()override;
-	//爆発作成
-	static CEffect* Create(D3DXVECTOR3 pos, D3DXVECTOR2 size,D3DXCOLOR col,int nLife);
+
+	//エフェクト作成
+	static CEffect* Create(D3DXVECTOR3 pos, D3DXVECTOR3 size,D3DXCOLOR col,int nLife);
 	static HRESULT Load(); //テクスチャのロード
 	static HRESULT UnLoad(); //テクスチャのアンロード
 private:

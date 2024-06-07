@@ -89,7 +89,7 @@ void CPlayer::Update()
 
 	m_oldpos = pos;
 
-	CEffect* pEffect = CEffect::Create(pos, D3DXVECTOR3(2000.0f, 0.0f ,2000.0f), D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f), 30);
+	CEffect* pEffect = CEffect::Create(D3DXVECTOR3(pos.x,pos.y + 8.0f,pos.z), D3DXVECTOR3(10.0f, 10.0f ,0.0f), D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f), 30);
 
 	pos += m_move;
 

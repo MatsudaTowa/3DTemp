@@ -108,6 +108,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	CBlock* pBlock = CBlock::Create(CBlock::BLOCKTYPE_DEFAULT,D3DXVECTOR3(0.0,0.0f,0.0f),
 									D3DXVECTOR3(0.0f, 0.0f, 0.0f),3,false);
+
+	pBlock = CBlock::Create(CBlock::BLOCKTYPE_DEFAULT, D3DXVECTOR3(10.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3, false);
 	
 	CField*pField = CField::Create(D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXVECTOR3(100.0f,0.0f,100.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
 

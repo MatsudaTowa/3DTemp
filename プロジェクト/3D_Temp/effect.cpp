@@ -20,7 +20,7 @@ LPDIRECT3DTEXTURE9 CEffect::m_pTextureTemp = nullptr;
 //=============================================
 //コンストラクタ
 //=============================================
-CEffect::CEffect(int nPriority):CMove_Texture(nPriority)
+CEffect::CEffect(int nPriority):CBillboard(nPriority)
 {
 }
 
@@ -37,7 +37,7 @@ CEffect::~CEffect()
 HRESULT CEffect::Init()
 {
 	//サイズ取得
-	D3DXVECTOR2 size = GetSize();
+	D3DXVECTOR3 size = GetSize();
 
 	//対角線
 	m_fLength = sqrtf(size.x * size.x + size.y * size.y);
@@ -45,12 +45,12 @@ HRESULT CEffect::Init()
 	//角度
 	m_fAngle = atan2f(size.x, size.y);
 
-	//テクスチャ移動量取得
-	D3DXVECTOR2 tex_move = GetTexMove();
-	tex_move.x = 1.0f / (float)TEX_SPLIT_X;
-	tex_move.y = 1.0f / (float)TEX_SPLIT_Y;
+	////テクスチャ移動量取得
+	//D3DXVECTOR2 tex_move = GetTexMove();
+	//tex_move.x = 1.0f / (float)TEX_SPLIT_X;
+	//tex_move.y = 1.0f / (float)TEX_SPLIT_Y;
 	//テクスチャ移動量代入
-	SetTexMove(tex_move);
+	//SetTexMove(tex_move);
 
 	//テクスチャ座標取得
 	D3DXVECTOR2 tex_pos = GetTexPos();
@@ -59,11 +59,11 @@ HRESULT CEffect::Init()
 	//テクスチャ座標代入
 	SetTexPos(tex_pos);
 
-	//アニメーションフレーム代入
-	SetAnimFrame(ANIMATION_FRAME);
+	////アニメーションフレーム代入
+	//SetAnimFrame(ANIMATION_FRAME);
 
 	//頂点設定
-	SetVtx(1.0f, m_col, m_fAngle, m_fLength);
+	SetVtx(D3DXVECTOR3(0.0f,0.0f,-1.0f), m_fAngle, m_fLength, m_col);
 	return S_OK;
 }
 
@@ -72,7 +72,7 @@ HRESULT CEffect::Init()
 //=============================================
 void CEffect::Uninit()
 {
-	CObject2D::Uninit();
+	CObject3D::Uninit();
 }
 
 //=============================================
@@ -82,15 +82,15 @@ void CEffect::Update()
 {
 	//テクスチャ情報取得
 	D3DXVECTOR2 tex_pos = GetTexPos();
-	D3DXVECTOR2 tex_move = GetTexMove();
-	AnimationTex(tex_pos, tex_move);
+	//D3DXVECTOR2 tex_move = GetTexMove();
+	//AnimationTex(tex_pos, tex_move);
 
-	D3DXVECTOR2 size = GetSize();
+	D3DXVECTOR3 size = GetSize();
 	if (m_nLife > 0)
 	{
 		m_nLife--;
-		size.x -= 0.4f;
-		size.y -= 0.4f;
+		size.x -= 0.2f;
+		size.y -= 0.2f;
 	}
 	else
 	{
@@ -103,7 +103,7 @@ void CEffect::Update()
 	//角度
 	m_fAngle = atan2f(size.x, size.y);
 	//頂点設定
-	SetVtx(1.0f, m_col, m_fAngle, m_fLength);
+	SetVtx(D3DXVECTOR3(0.0f, 0.0f, -1.0f), m_fLength, m_fAngle, m_col);
 }
 
 //=============================================  
@@ -114,23 +114,32 @@ void CEffect::Draw()
 	CRenderer* pRender = CManager::GetRenderer();
 
 	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
+	//zの比較方法変更
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
+	//zバッファに書き込まない
+	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	//αブレンディングを加算合成に設定
 	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
-	CObject2D::Draw();
+	CBillboard::Draw();
 
+	//zの比較方法変更
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+	//zバッファに書き込まない
+	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	//αブレンディングを元に戻す
 	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
+
 //=============================================
 //エフェクト生成
 //=============================================
-CEffect* CEffect::Create(D3DXVECTOR3 pos, D3DXVECTOR2 size, D3DXCOLOR col, int nLife)
+CEffect* CEffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXCOLOR col, int nLife)
 {
 	CEffect* pEffect = new CEffect;
 	if (pEffect != nullptr)

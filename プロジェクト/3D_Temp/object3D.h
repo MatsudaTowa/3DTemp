@@ -48,8 +48,17 @@ public:
 		m_tex_pos = tex;
 	}
 
+	//テクスチャ座標の代入
+	void SetMtxWorld(D3DXMATRIX mtxWorld)
+	{
+		m_mtxWorld = mtxWorld;
+	}
+
 	//頂点座標の代入
 	void SetVtx(D3DXVECTOR3 nor, D3DCOLOR col);
+
+	//頂点座標の代入
+	void SetVtx(D3DXVECTOR3 nor,float fAngle, float fLength, D3DCOLOR col);
 
 	//posの取得
 	D3DXVECTOR3& GetPos();
@@ -65,6 +74,12 @@ public:
 
 	//頂点情報取得
 	LPDIRECT3DVERTEXBUFFER9& GetVtxBuff();
+
+	//テクスチャ情報取得
+	LPDIRECT3DTEXTURE9& GetTexture();
+
+	//ワールドマトリックス取得
+	D3DXMATRIX& GetMtxWorld();
 
 private:
 
