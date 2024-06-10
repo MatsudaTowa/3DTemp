@@ -11,6 +11,7 @@
 #include "input.h"
 #include "camera.h"
 #include "light.h"
+#include "texture.h"
 
 class CManager
 {
@@ -30,11 +31,14 @@ public:
 	static CCamera* GetCamera();
 	//ライト取得
 	static CLight* GetLight();
+	//テクスチャ取得
+	static CTexture* GetTexture();
 private:
 	static CRenderer* m_pRenderer;
 	static CInputKeyboard* m_pKeyboard;
 	static CCamera* m_pCamera;
 	static CLight* m_pLight;
+	static CTexture* m_pTexture;
 };
 
 #endif

@@ -21,12 +21,34 @@ public:
 private:
 	static const float DEFAULT_MOVE; //通常時の移動
 	static const float DAMPING_COEFFICIENT; //移動抵抗
+
 	static const float DEFAULT_LENGTH_Y; //通常状態のYの距離
 	static const float DEFAULT_LENGTH_Z; //通常状態のZの距離
+
+	static const float BIRDVIEW_LENGTH_Y; //バードビュー時のYの距離
+
+	static const float SIDEVIEW_LENGTH_X; //サイドビュー時のXの距離
+	static const float SIDEVIEW_LENGTH_Y; //サイドビュー時のYの距離
+	static const float SIDEVIEW_LENGTH_Z; //サイドビュー時のZの距離
+
+	//カメラタイプ宣言
+	typedef enum
+	{
+		TYPE_BIRDVIEW = 0,
+		TYPE_SIDEVIEW,
+		TYPE_DEBUG,
+		TYPE_MAX,
+	}CANERA_TYPE;
 
 	void CameraMove(); //カメラ移動処理
 
 	void CameraTurn(); //カメラ回転処理
+
+	void BirdViewCamera(); //バードビュー処理
+
+	void SideViewCamera(); //サイドビュー処理
+
+	CANERA_TYPE m_type; //カメラタイプ
 
 	D3DXVECTOR3 m_posV; //視点
 	D3DXVECTOR3 m_posR; //注視点

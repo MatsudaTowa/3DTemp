@@ -7,6 +7,8 @@
 #include "camera.h"
 #include "renderer.h"
 #include "manager.h"
+#include "object.h"
+#include "player.h"
 
 //通常の移動速度
 const float CCamera::DEFAULT_MOVE = 1.0f;
@@ -19,6 +21,18 @@ const float CCamera::DEFAULT_LENGTH_Y = 200.0f;
 
 //通常状態のZの距離
 const float CCamera::DEFAULT_LENGTH_Z = 500.0f;
+
+//バードビュー時のYの距離
+const float CCamera::BIRDVIEW_LENGTH_Y = 300.0f;
+
+//サイドビュー時のXの距離
+const float CCamera::SIDEVIEW_LENGTH_X = 200.0f;
+
+//サイドビュー時のYの距離
+const float CCamera::SIDEVIEW_LENGTH_Y = 50.0f;
+
+//サイドビュー時のZの距離
+const float CCamera::SIDEVIEW_LENGTH_Z = 200.0f;
 
 //=============================================
 //コンストラクタ
@@ -39,7 +53,10 @@ CCamera::~CCamera()
 //=============================================
 HRESULT CCamera::Init()
 {
-	m_posV = D3DXVECTOR3(0.0f, 100.0f, -200.0f); //視点
+
+	m_type = TYPE_BIRDVIEW;
+	
+	m_posV = D3DXVECTOR3(0.0f, 200.0f, -180.0f); //視点
 	m_posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f); //注視
 
 	m_vecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f); //上方向ベクトル
@@ -70,8 +87,39 @@ void CCamera::Uninit()
 //=============================================
 void CCamera::Update()
 {
-	CameraTurn();
-	CameraMove();
+	//キーボード情報取得
+	CInputKeyboard* pKeyboard = CManager::GetKeyboard();
+
+	if (pKeyboard->GetTrigger(DIK_F1))
+	{
+		m_type = TYPE_BIRDVIEW;
+	}
+	else if (pKeyboard->GetTrigger(DIK_F2))
+	{
+		m_type = TYPE_SIDEVIEW;
+	}
+	else if (pKeyboard->GetTrigger(DIK_F3))
+	{
+		m_type = TYPE_DEBUG;
+	}
+
+
+	switch (m_type)
+	{
+	case TYPE_BIRDVIEW:
+		BirdViewCamera();
+		break;
+	case TYPE_SIDEVIEW:
+		SideViewCamera();
+		break;
+	case TYPE_DEBUG:
+		CameraTurn();
+		CameraMove();
+		break;
+	default:
+		break;
+	}
+
 
 	if (m_rot.y > D3DX_PI)
 	{
@@ -153,6 +201,7 @@ void CCamera::SetCamera()
 //=============================================
 void CCamera::CameraMove()
 {
+	//キーボード情報取得
 	CInputKeyboard* pKeyboard = CManager::GetKeyboard();
 	D3DXVECTOR3 vecDirection(0.0f, 0.0f, 0.0f);
 
@@ -196,70 +245,7 @@ void CCamera::CameraMove()
 		m_moveR.z += cosf(D3DX_PI + m_rot.y) * DEFAULT_MOVE;
 
 	}
-	//if (vecDirection.x == 0.0f && vecDirection.z == 0.0f)
-	//{ // 動いてない。
-	//	m_moveV.x = 0.0f;
-	//	m_moveV.z = 0.0f;
-	//	m_moveR.x = 0.0f;
-	//	m_moveR.z = 0.0f;
-	//}
-	//else
-	//{
-	//	float rotMoveY = atan2f(vecDirection.x, vecDirection.z);
 
-	//	m_moveV.x += sinf(rotMoveY) * DEFAULT_MOVE;
-	//	m_moveV.z += cosf(rotMoveY) * DEFAULT_MOVE;
-
-	//	m_moveR.x += sinf(rotMoveY) * DEFAULT_MOVE;
-	//	m_moveR.z += cosf(rotMoveY) * DEFAULT_MOVE;
-
-	//	m_rot.y = rotMoveY + D3DX_PI;
-
-	//	//if (g_Player.rot.y <= -D3DX_PI)
-	//	//{
-	//	//	g_Player.rot.y = D3DX_PI;
-	//	//}
-
-	//}
-	//if (GetKeyboardPress(DIK_J) == true)
-	//{
-	//	m_moveV.x -= sinf(D3DX_PI / 2 + m_rot.y) * CAMERA_MOVE;
-	//	m_moveR.x -= sinf(D3DX_PI / 2 + m_rot.y) * CAMERA_MOVE;
-
-	//	m_moveV.z -= cosf(D3DX_PI / 2 + m_rot.y) * CAMERA_MOVE;
-	//	m_moveR.z -= cosf(D3DX_PI / 2 + m_rot.y) * CAMERA_MOVE;
-
-	//}
-
-	//if (GetKeyboardPress(DIK_L) == true)
-	//{
-	//	m_moveV.x += sinf(D3DX_PI / 2 + m_rot.y) * CAMERA_MOVE;
-	//	m_moveR.x += sinf(D3DX_PI / 2 + m_rot.y) * CAMERA_MOVE;
-
-	//	m_moveV.z += cosf(D3DX_PI / 2 + m_rot.y) * CAMERA_MOVE;
-	//	m_moveR.z += cosf(D3DX_PI / 2 + m_rot.y) * CAMERA_MOVE;
-
-	//}
-
-
-	//if (GetKeyboardPress(DIK_I) == true)
-	//{
-	//	m_moveV.x -= sinf(D3DX_PI + m_rot.y) * CAMERA_MOVE;
-	//	m_moveR.x -= sinf(D3DX_PI + m_rot.y) * CAMERA_MOVE;
-
-	//	m_moveV.z -= cosf(D3DX_PI + m_rot.y) * CAMERA_MOVE;
-	//	m_moveR.z -= cosf(D3DX_PI + m_rot.y) * CAMERA_MOVE;
-
-	//}
-
-	//if (GetKeyboardPress(DIK_K) == true)
-	//{
-	//	m_moveV.x += sinf(D3DX_PI + m_rot.y) * CAMERA_MOVE;
-	//	m_moveR.x += sinf(D3DX_PI + m_rot.y) * CAMERA_MOVE;
-
-	//	m_moveV.z += cosf(D3DX_PI + m_rot.y) * CAMERA_MOVE;
-	//	m_moveR.z += cosf(D3DX_PI + m_rot.y) * CAMERA_MOVE;
-	//}
 }
 
 //=============================================
@@ -267,6 +253,7 @@ void CCamera::CameraMove()
 //=============================================
 void CCamera::CameraTurn()
 {
+	//キーボード情報取得
 	CInputKeyboard* pKeyboard = CManager::GetKeyboard();
 	if (pKeyboard->GetPress(DIK_Q) == true)
 	{
@@ -289,14 +276,7 @@ void CCamera::CameraTurn()
 		m_rot.y -= 0.02f;
 
 		m_posV.x = m_posR.x - sinf(m_rot.y) * m_fLength;
-		//if (m_bCameraAngle == true)
-		//{
-		//	m_posV.y = DEFAULT_LENGTH_Y;
-		//}
-		//else if (m_bCameraAngle == false)
-		//{
-		//	m_posV.y = EDIT_LENGTH_Y;
-		//}
+
 		m_posV.z = m_posR.z - cosf(m_rot.y) * m_fLength;
 	}
 
@@ -305,14 +285,60 @@ void CCamera::CameraTurn()
 		m_rot.y += 0.02f;
 
 		m_posV.x = m_posR.x - sinf(m_rot.y) * m_fLength;
-		//if (m_bCameraAngle == true)
-		//{
-		//	m_posV.y = DEFAULT_LENGTH_Y;
-		//}
-		//else if (m_bCameraAngle == false)
-		//{
-		//	m_posV.y = EDIT_LENGTH_Y;
-		//}
+
 		m_posV.z = m_posR.z - cosf(m_rot.y) * m_fLength;
+	}
+}
+
+//=============================================
+//バードビュー処理
+//=============================================
+void CCamera::BirdViewCamera()
+{
+	for (int nCnt = 0; nCnt < CObject::MAX_OBJECT; nCnt++)
+	{
+		//オブジェクト取得
+		CObject* pObj = CObject::Getobject(8, nCnt);
+		if (pObj != nullptr)
+		{//ヌルポインタじゃなければ
+			//タイプ取得
+			CObject::OBJECT_TYPE type = pObj->GetType();
+			if (type == CObject::OBJECT_TYPE::OBJECT_TYPE_PLAYER)
+			{
+				CPlayer* pPlayer = (CPlayer*)pObj;
+				m_posR =pPlayer->GetPos();
+				m_posV.x = m_posR.x - sinf(m_rot.y);
+				m_posV.y = BIRDVIEW_LENGTH_Y;
+				m_posV.z = m_posR.z - cosf(m_rot.y);
+			}
+		}
+
+	}
+}
+
+
+//=============================================
+//サイドビュー処理
+//=============================================
+void CCamera::SideViewCamera()
+{
+	for (int nCnt = 0; nCnt < CObject::MAX_OBJECT; nCnt++)
+	{
+		//オブジェクト取得
+		CObject* pObj = CObject::Getobject(8, nCnt);
+		if (pObj != nullptr)
+		{//ヌルポインタじゃなければ
+			//タイプ取得
+			CObject::OBJECT_TYPE type = pObj->GetType();
+			if (type == CObject::OBJECT_TYPE::OBJECT_TYPE_PLAYER)
+			{
+				CPlayer* pPlayer = (CPlayer*)pObj;
+				m_posR = pPlayer->GetPos();
+				m_posV.x = m_posR.x - sinf(m_rot.y)* SIDEVIEW_LENGTH_X;
+				m_posV.y = SIDEVIEW_LENGTH_Y;
+				m_posV.z = m_posR.z - cosf(m_rot.y) * SIDEVIEW_LENGTH_Z;
+			}
+		}
+
 	}
 }

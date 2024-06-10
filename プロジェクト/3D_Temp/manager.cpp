@@ -31,6 +31,10 @@ CCamera*CManager::m_pCamera = nullptr;
 //ライト設定
 CLight*CManager::m_pLight = nullptr;
 
+//テクスチャ設定
+CTexture* CManager::m_pTexture = nullptr;
+
+
 //=============================================
 //コンストラクタ
 //=============================================
@@ -80,6 +84,12 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	{
 		m_pLight = new CLight();
 		m_pLight->Init();
+	}
+
+	//テクスチャ生成
+	if (m_pTexture == nullptr)
+	{
+		m_pTexture = new CTexture();
 	}
 	
 	//読み込み
@@ -146,7 +156,7 @@ void CManager::Uninit()
 		delete m_pRenderer;
 		m_pRenderer = nullptr;
 	}
-	
+	m_pTexture->Unload();
 	//キーボードの終了処理
 	m_pKeyboard->Uninit();
 }
@@ -204,4 +214,12 @@ CCamera* CManager::GetCamera()
 CLight* CManager::GetLight()
 {
 	return m_pLight;
+}
+
+//=============================================
+//テクスチャ取得
+//=============================================
+CTexture* CManager::GetTexture()
+{
+	return m_pTexture;
 }
