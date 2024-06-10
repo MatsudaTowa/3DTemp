@@ -14,10 +14,11 @@
 class CEffect : public CBillboard
 {
 public:
+	static const int EFFECT_PRIORITY = 3; //描画順
 	static const int TEX_SPLIT_X; //テクスチャの分割数
 	static const int TEX_SPLIT_Y; //テクスチャの分割数
 	static const int ANIMATION_FRAME; //アニメーションフレーム数
-	CEffect(int nPriority = 5);
+	CEffect(int nPriority = EFFECT_PRIORITY);
 	~CEffect()override;
 	HRESULT Init()override;
 	void Uninit()override;

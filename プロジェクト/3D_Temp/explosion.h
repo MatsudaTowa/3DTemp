@@ -11,10 +11,12 @@
 class CExplosion : public CMove_Texture
 {
 public:
+	static const int EXPLOSION_PRIORITY = 5; //描画順
+
 	static const int TEX_SPLIT_X; //テクスチャの分割数
 	static const int TEX_SPLIT_Y; //テクスチャの分割数
 	static const int ANIMATION_FRAME; //アニメーションフレーム数
-	CExplosion(int nPriority = 5);
+	CExplosion(int nPriority = EXPLOSION_PRIORITY);
 	~CExplosion()override;
 	HRESULT Init()override;
 	void Uninit()override;

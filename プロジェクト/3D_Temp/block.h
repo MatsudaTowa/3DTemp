@@ -13,6 +13,7 @@
 class CBlock : public CObjectX
 {
 public:
+	static const int BLOCK_PRIORITY = 3; //ï`âÊèá
 	typedef enum
 	{
 		BLOCKTYPE_NONE = 0,
@@ -21,7 +22,7 @@ public:
 		BLOCKTYPE_MAX,
 	}BLOCKTYPE;
 
-	CBlock(int nPriority = 2);
+	CBlock(int nPriority = BLOCK_PRIORITY);
 	~CBlock()override;
 	HRESULT Init()override;
 	void Uninit()override;

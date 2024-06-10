@@ -48,6 +48,7 @@ private:
 
 	void SideViewCamera(); //サイドビュー処理
 
+
 	CANERA_TYPE m_type; //カメラタイプ
 
 	D3DXVECTOR3 m_posV; //視点

@@ -14,7 +14,7 @@
 class CObject3D : public CObject
 {
 public:
-	CObject3D(int nPriority = 5);
+	CObject3D(int nPriority = 3);
 	~CObject3D()override;
 	HRESULT Init()override;
 	void Uninit()override;

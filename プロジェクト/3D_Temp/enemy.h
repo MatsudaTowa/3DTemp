@@ -14,10 +14,12 @@
 class CEnemy : public CMove_Texture
 {
 public:
+	static const int EFFECT_PRIORITY = 4; //描画順
+
 	static const int TEX_SPLIT_X; //テクスチャの分割数
 	static const int TEX_SPLIT_Y; //テクスチャの分割数
 	static const int ANIMATION_FRAME; //アニメーションフレーム数
-	CEnemy(int nPriority = 4);
+	CEnemy(int nPriority = EFFECT_PRIORITY);
 	~CEnemy()override;
 	HRESULT Init()override;
 	void Uninit()override;

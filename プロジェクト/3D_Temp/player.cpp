@@ -292,7 +292,7 @@ void CPlayer::HitBlock(D3DXVECTOR3 oldpos)
 	for (int nCnt = 0; nCnt < MAX_OBJECT; nCnt++)
 	{
 		//オブジェクト取得
-		CObject* pObj = CObject::Getobject(2, nCnt);
+		CObject* pObj = CObject::Getobject(CBlock::BLOCK_PRIORITY, nCnt);
 		if (pObj != nullptr)
 		{//ヌルポインタじゃなければ
 			//タイプ取得

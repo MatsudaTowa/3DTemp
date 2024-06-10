@@ -16,7 +16,7 @@ class CObjectX : public CObject
 public:
 	static const int MAX_TEX = 16; //テクスチャの数
 
-	CObjectX(int nPriority = 5);
+	CObjectX(int nPriority = 3);
 	~CObjectX()override;
 	HRESULT Init()override;
 	void Uninit()override;

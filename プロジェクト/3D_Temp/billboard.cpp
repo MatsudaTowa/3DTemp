@@ -10,7 +10,7 @@
 //=============================================
 //コンストラクタ
 //=============================================
-CBillboard::CBillboard(int nPriority)
+CBillboard::CBillboard(int nPriority) :CObject3D(nPriority)
 {
 }
 

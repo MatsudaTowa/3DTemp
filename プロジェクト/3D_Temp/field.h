@@ -14,7 +14,9 @@
 class CField : public CObject3D
 {
 public:
-	CField(int nPriority = 3);
+	static const int FIELD_PRIORITY = 3; //ï`âÊèá
+
+	CField(int nPriority = FIELD_PRIORITY);
 	~CField()override;
 	HRESULT Init()override;
 	void Uninit()override;

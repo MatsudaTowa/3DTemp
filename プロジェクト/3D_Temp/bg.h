@@ -14,7 +14,8 @@
 class CBg : public CObject2D
 {
 public:
-	CBg(int nPriority = 1);
+	static const int BG_PRIORITY = 1;  //ï`âÊèá
+	CBg(int nPriority = BG_PRIORITY);
 	~CBg()override;
 	HRESULT Init()override;
 	void Uninit()override;

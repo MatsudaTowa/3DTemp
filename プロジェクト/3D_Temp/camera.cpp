@@ -298,7 +298,7 @@ void CCamera::BirdViewCamera()
 	for (int nCnt = 0; nCnt < CObject::MAX_OBJECT; nCnt++)
 	{
 		//オブジェクト取得
-		CObject* pObj = CObject::Getobject(8, nCnt);
+		CObject* pObj = CObject::Getobject(CPlayer::PLAYER_PRIORITY, nCnt);
 		if (pObj != nullptr)
 		{//ヌルポインタじゃなければ
 			//タイプ取得
@@ -317,6 +317,7 @@ void CCamera::BirdViewCamera()
 }
 
 
+
 //=============================================
 //サイドビュー処理
 //=============================================
@@ -325,7 +326,7 @@ void CCamera::SideViewCamera()
 	for (int nCnt = 0; nCnt < CObject::MAX_OBJECT; nCnt++)
 	{
 		//オブジェクト取得
-		CObject* pObj = CObject::Getobject(8, nCnt);
+		CObject* pObj = CObject::Getobject(CPlayer::PLAYER_PRIORITY, nCnt);
 		if (pObj != nullptr)
 		{//ヌルポインタじゃなければ
 			//タイプ取得

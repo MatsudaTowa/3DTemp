@@ -13,7 +13,9 @@
 class CPlayer : public CObjectX
 {
 public:
-	CPlayer(int nPriority = 8);
+	static const int PLAYER_PRIORITY = 8; //ï`âÊèá
+
+	CPlayer(int nPriority = PLAYER_PRIORITY);
 	~CPlayer()override;
 	HRESULT Init()override;
 	void Uninit()override;

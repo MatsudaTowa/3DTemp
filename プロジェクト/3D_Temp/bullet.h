@@ -10,7 +10,8 @@
 class CBullet : public CObject2D
 {
 public:
-	CBullet(int nPriority = 1);
+	static const int BULLET_PRIORITY = 2; //ï`âÊèá
+	CBullet(int nPriority = BULLET_PRIORITY);
 	~CBullet()override;
 	HRESULT Init()override;
 	void Uninit()override;
