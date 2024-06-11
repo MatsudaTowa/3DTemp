@@ -35,7 +35,9 @@ private:
 	static const float COLISION_CORRECTION; //当たり判定補正値
 	static const float GRAVITY_MOVE; //重力値
 	static const float GRAVITY_MAX; //重力最大値
+	static const float DEADZONE_Y; //これを過ぎたらプレイヤー破棄
 
+	void ReSpawn(); //リスポーン
 	void Gravity(); //重力処理
 	void PlayerMove(); //プレイヤー移動処理
 	void Turn();	//回転処理

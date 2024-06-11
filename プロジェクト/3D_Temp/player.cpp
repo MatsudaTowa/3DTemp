@@ -31,6 +31,9 @@ const float CPlayer::GRAVITY_MOVE = 0.8f;
 //重力最大値
 const float CPlayer::GRAVITY_MAX = 32.0f;
 
+//プレイヤーをリスポーンされる座標
+const float CPlayer::DEADZONE_Y = -100.0f;
+
 //テクスチャ初期化
 LPDIRECT3DTEXTURE9 CPlayer::m_pTextureTemp = nullptr;
 
@@ -98,6 +101,7 @@ void CPlayer::Update()
 	//{//着地してなかったら重力処理実行
 		Gravity();
 	//}
+
 	PlayerMove();
 
 	D3DXVECTOR3 pos = GetPos();
@@ -116,20 +120,17 @@ void CPlayer::Update()
 
 	D3DXVECTOR3 minpos = GetMinPos();
 	D3DXVECTOR3 maxpos = GetMaxPos();
-
 	
 	HitBlock(m_oldpos);
 
+	if (pos.y < DEADZONE_Y)
+	{//リスポーン処理
+		ReSpawn();
+	}
 	
 	//Turn(); //回転処理
 	//SizeChange(); //拡縮
 
-	CInputKeyboard* pKeyboard = CManager::GetKeyboard();
-	//if (pKeyboard->GetTrigger(DIK_SPACE))
-	//{
-	//	//弾生成
-	//	CBullet* CBullet = CBullet::Create(pos,D3DXVECTOR3(10.0f,0.0f,0.0f),D3DXVECTOR2(15.0f,15.0f),60);
-	//}
 
 }
 
@@ -209,6 +210,15 @@ HRESULT CPlayer::UnLoad()
 	}
 	return S_OK;
 }
+//=============================================
+//リスポーン
+//=============================================
+void CPlayer::ReSpawn()
+{
+	D3DXVECTOR3 PlayerPos = GetPos();
+	PlayerPos = D3DXVECTOR3(50.0f, 0.5f, 0.0f);
+	SetPos(PlayerPos);
+}
 
 //=============================================
 //重力処理
@@ -268,7 +278,6 @@ void CPlayer::PlayerMove()
 		//{
 		//	g_Player.rot.y = D3DX_PI;
 		//}
-
 	}
 	if (m_nJumpCnt < MAX_JUMPCNT)
 	{//ジャンプ数以下だったら
