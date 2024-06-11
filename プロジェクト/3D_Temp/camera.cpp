@@ -334,7 +334,9 @@ void CCamera::SideViewCamera()
 			if (type == CObject::OBJECT_TYPE::OBJECT_TYPE_PLAYER)
 			{
 				CPlayer* pPlayer = (CPlayer*)pObj;
-				m_posR = pPlayer->GetPos();
+				m_posR.x = pPlayer->GetPos().x;
+				m_posR.y = 20.0f;
+				m_posR.z = pPlayer->GetPos().z;
 				m_posV.x = m_posR.x - sinf(m_rot.y)* SIDEVIEW_LENGTH_X;
 				m_posV.y = SIDEVIEW_LENGTH_Y;
 				m_posV.z = m_posR.z - cosf(m_rot.y) * SIDEVIEW_LENGTH_Z;

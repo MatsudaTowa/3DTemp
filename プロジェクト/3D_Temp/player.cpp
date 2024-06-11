@@ -10,13 +10,26 @@
 #include "bullet.h"
 #include "block.h"
 #include "effect.h"
+#include "field.h"
 
 //通常の移動速度
 const float CPlayer::DEFAULT_MOVE = 0.5f;
 //通常の移動速度
 const float CPlayer::DAMPING_COEFFICIENT = 0.3f;
+
+//通常のジャンプ力
+const float CPlayer::DEFAULT_JUMP = 22.0f;
+
+//ジャンプ回数
+const int CPlayer::MAX_JUMPCNT = 2;
+
 //当たり判定補正値
 const float CPlayer::COLISION_CORRECTION = 15.0f;
+
+//重力値
+const float CPlayer::GRAVITY_MOVE = 0.8f;
+//重力最大値
+const float CPlayer::GRAVITY_MAX = 32.0f;
 
 //テクスチャ初期化
 LPDIRECT3DTEXTURE9 CPlayer::m_pTextureTemp = nullptr;
@@ -29,8 +42,9 @@ DWORD CPlayer::m_dwNumMat = 0;
 //=============================================
 //コンストラクタ
 //=============================================
-CPlayer::CPlayer(int nPriority):CObjectX(nPriority)
-{
+CPlayer::CPlayer(int nPriority):CObjectX(nPriority),m_nJumpCnt(0)
+{//イニシャライザーでジャンプカウント初期化
+	m_bLanding = false; //着地
 }
 
 //=============================================
@@ -80,6 +94,10 @@ void CPlayer::Uninit()
 //=============================================
 void CPlayer::Update()
 {
+	//if (m_bLanding != true)
+	//{//着地してなかったら重力処理実行
+		Gravity();
+	//}
 	PlayerMove();
 
 	D3DXVECTOR3 pos = GetPos();
@@ -102,14 +120,6 @@ void CPlayer::Update()
 	
 	HitBlock(m_oldpos);
 
-	if (pos.x > SCREEN_WIDTH)
-	{
-		pos.x = 0.0f;
-	}
-	if (pos.y > SCREEN_HEIGHT)
-	{
-		pos.y = 0.0f;
-	}
 	
 	//Turn(); //回転処理
 	//SizeChange(); //拡縮
@@ -201,6 +211,17 @@ HRESULT CPlayer::UnLoad()
 }
 
 //=============================================
+//重力処理
+//=============================================
+void CPlayer::Gravity()
+{
+	if (m_move.y < GRAVITY_MAX)
+	{
+		m_move.y -= GRAVITY_MOVE;
+	}
+}
+
+//=============================================
 //移動処理
 //=============================================
 void CPlayer::PlayerMove()
@@ -225,10 +246,11 @@ void CPlayer::PlayerMove()
 		vecDirection.x += 1.0f;
 	}
 
+
 	if (vecDirection.x == 0.0f && vecDirection.z == 0.0f)
 	{ // 動いてない。
 		m_move.x = 0.0f;
-		m_move.y = 0.0f;
+		m_move.z = 0.0f;
 	}
 	else
 	{
@@ -248,6 +270,16 @@ void CPlayer::PlayerMove()
 		//}
 
 	}
+	if (m_nJumpCnt < MAX_JUMPCNT)
+	{//ジャンプ数以下だったら
+		if (pKeyboard->GetTrigger(DIK_SPACE))
+		{
+			m_move.y = DEFAULT_JUMP;
+			m_bLanding = false; //空中
+			m_nJumpCnt++; //ジャンプ数加算
+		}
+	}
+
 }
 
 //=============================================
@@ -337,7 +369,24 @@ void CPlayer::HitBlock(D3DXVECTOR3 oldpos)
 					m_move.z = 0.0f;
 				}
 			}
-
+			if (type == CObject::OBJECT_TYPE::OBJECT_TYPE_FIELD)
+			{
+				CField* pField = (CField*)pObj;
+				if (oldpos.y + PlayerMin.y >= pField->GetPos().y
+					&& PlayerPos.y + PlayerMin.y <= pField->GetPos().y
+					&& oldpos.x + PlayerMax.x < pField->GetPos().x + pField->GetSize().x + COLISION_CORRECTION
+					&& oldpos.x + PlayerMin.x > pField->GetPos().x - pField->GetSize().x - COLISION_CORRECTION
+					&& oldpos.z + PlayerMax.z < pField->GetPos().z + pField->GetSize().z + COLISION_CORRECTION
+					&& oldpos.z + PlayerMin.z > pField->GetPos().z - pField->GetSize().z - COLISION_CORRECTION
+					)
+				{//当たり判定(Y)
+					PlayerPos.y = oldpos.y;
+					m_move.y = 0.0f;
+					m_bLanding = true; //着地
+					m_nJumpCnt = 0; //ジャンプ数リセット
+				}
+				
+			}
 		}
 	}
 	SetPos(PlayerPos);

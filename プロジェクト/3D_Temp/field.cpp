@@ -73,6 +73,7 @@ CField* CField::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot)
 		pField->SetPos(pos); //pos設定
 		pField->SetSize(size); //サイズ設定
 		pField->BindTexture(m_pTextureTemp);
+		pField->SetType(OBJECT_TYPE_FIELD); //タイプ設定
 		pField->Init();
 	}
 
@@ -90,7 +91,7 @@ HRESULT CField::Load()
 	{
 		//テクスチャの読み込み
 		D3DXCreateTextureFromFile(pDevice,
-			"data\\TEXTURE\\effect000.jpg",
+			"data\\TEXTURE\\images (2).jpg",
 			&m_pTextureTemp);
 	}
 	return S_OK;

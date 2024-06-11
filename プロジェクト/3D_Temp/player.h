@@ -30,8 +30,13 @@ public:
 private:
 	static const float DEFAULT_MOVE; //通常時の移動
 	static const float DAMPING_COEFFICIENT; //移動抵抗
+	static const float DEFAULT_JUMP; //通常時のジャンプ力
+	static const int MAX_JUMPCNT; //ジャンプ回数
 	static const float COLISION_CORRECTION; //当たり判定補正値
+	static const float GRAVITY_MOVE; //重力値
+	static const float GRAVITY_MAX; //重力最大値
 
+	void Gravity(); //重力処理
 	void PlayerMove(); //プレイヤー移動処理
 	void Turn();	//回転処理
 	void SizeChange();	//サイズ変更処理
@@ -40,6 +45,8 @@ private:
 	D3DXVECTOR3 m_move; //速度
 	D3DXVECTOR3 m_oldpos; //過去の位置
 	bool m_bSize; //サイズ変更するかどうか
+	bool m_bLanding; //着地してるかどうか
+	int m_nJumpCnt; //ジャンプカウント
 
 	static LPDIRECT3DTEXTURE9 m_pTextureTemp;
 
