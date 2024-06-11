@@ -24,7 +24,7 @@ const float CPlayer::DEFAULT_JUMP = 22.0f;
 const int CPlayer::MAX_JUMPCNT = 2;
 
 //当たり判定補正値
-const float CPlayer::COLISION_CORRECTION = 15.0f;
+const float CPlayer::COLISION_CORRECTION = 15.5f;
 
 //重力値
 const float CPlayer::GRAVITY_MOVE = 0.8f;
@@ -338,62 +338,111 @@ void CPlayer::HitBlock(D3DXVECTOR3 oldpos)
 		{//ヌルポインタじゃなければ
 			//タイプ取得
 			CObject::OBJECT_TYPE type = pObj->GetType();
+
+			//ブロックとの当たり判定
 			if (type == CObject::OBJECT_TYPE::OBJECT_TYPE_BLOCK)
 			{
 				CBlock* pBlock = (CBlock*)pObj;
-
-				if (oldpos.x + PlayerMax.x <= pBlock->GetPos().x + pBlock->GetMinPos().x
-					&& PlayerPos.x + PlayerMax.x > pBlock->GetPos().x + pBlock->GetMinPos().x
-					&& PlayerPos.z + PlayerMax.z < pBlock->GetPos().z + pBlock->GetMaxPos().z + COLISION_CORRECTION
-					&& PlayerPos.z + PlayerMin.z > pBlock->GetPos().z + pBlock->GetMinPos().z - COLISION_CORRECTION)
-				{//当たり判定(X)
-					PlayerPos.x = oldpos.x;
-					m_move.x = 0.0f;
-				}
-				else if (oldpos.x + PlayerMin.x >= pBlock->GetPos().x + pBlock->GetMaxPos().x
-					&& PlayerPos.x + PlayerMin.x < pBlock->GetPos().x + pBlock->GetMaxPos().x
-					&& PlayerPos.z + PlayerMax.z < pBlock->GetPos().z + pBlock->GetMaxPos().z + COLISION_CORRECTION
-					&& PlayerPos.z + PlayerMin.z > pBlock->GetPos().z + pBlock->GetMinPos().z - COLISION_CORRECTION)
-				{//当たり判定(X)
-					PlayerPos.x = oldpos.x;
-					m_move.x = 0.0f;
+				if (oldpos.x + PlayerMax.x <= pBlock->GetPos().x + pBlock->GetMinPos().x 
+					&&PlayerPos.x + PlayerMax.x > pBlock->GetPos().x + pBlock->GetMinPos().x)
+				{
+					if (oldpos.z + PlayerMin.z < pBlock->GetPos().z + pBlock->GetMaxPos().z
+						&& oldpos.z + PlayerMax.z > pBlock->GetPos().z + pBlock->GetMinPos().z
+						&& oldpos.y + PlayerMin.y < pBlock->GetPos().y + pBlock->GetMaxPos().y
+						&& oldpos.y + PlayerMax.y > pBlock->GetPos().y + pBlock->GetMinPos().y)
+					{//当たり判定(X)
+						PlayerPos.x = oldpos.x;
+						m_move.x = 0.0f;
+					}
 				}
 
-				if(oldpos.z + PlayerMax.z <= pBlock->GetPos().z + pBlock->GetMinPos().z
-					&& PlayerPos.z + PlayerMax.z > pBlock->GetPos().z + pBlock->GetMinPos().z
-					&& oldpos.x + PlayerMax.x < pBlock->GetPos().x + pBlock->GetMaxPos().x + COLISION_CORRECTION
-					&& oldpos.x + PlayerMin.x > pBlock->GetPos().x + pBlock->GetMinPos().x - COLISION_CORRECTION
-					)
-				{//当たり判定(Z)
-					PlayerPos.z = oldpos.z;
-					m_move.z = 0.0f;
+				if (oldpos.x + PlayerMin.x >= pBlock->GetPos().x + pBlock->GetMaxPos().x
+					&& PlayerPos.x + PlayerMin.x < pBlock->GetPos().x + pBlock->GetMaxPos().x)
+				{
+					 if (oldpos.z + PlayerMin.z < pBlock->GetPos().z + pBlock->GetMaxPos().z 
+					&& oldpos.z + PlayerMax.z > pBlock->GetPos().z + pBlock->GetMinPos().z 
+					&& oldpos.y + PlayerMin.y < pBlock->GetPos().y + pBlock->GetMaxPos().y 
+					&& oldpos.y + PlayerMax.y > pBlock->GetPos().y + pBlock->GetMinPos().y )
+					{//当たり判定(X)
+						PlayerPos.x = oldpos.x;
+						m_move.x = 0.0f;
+					}
 				}
-				else if (oldpos.z + PlayerMin.z >= pBlock->GetPos().z + pBlock->GetMaxPos().z
-					&& PlayerPos.z + PlayerMin.z < pBlock->GetPos().z + pBlock->GetMaxPos().z
-					&& oldpos.x + PlayerMax.x < pBlock->GetPos().x + pBlock->GetMaxPos().x + COLISION_CORRECTION
-					&& oldpos.x + PlayerMin.x > pBlock->GetPos().x + pBlock->GetMinPos().x - COLISION_CORRECTION
-					)
-				{//当たり判定(Z)
-					PlayerPos.z = oldpos.z;
-					m_move.z = 0.0f;
+
+				if (oldpos.z + PlayerMax.z <= pBlock->GetPos().z + pBlock->GetMinPos().z
+					&& PlayerPos.z + PlayerMax.z > pBlock->GetPos().z + pBlock->GetMinPos().z)
+				{
+					if (oldpos.x + PlayerMin.x < pBlock->GetPos().x + pBlock->GetMaxPos().x
+						&& oldpos.x + PlayerMax.x > pBlock->GetPos().x + pBlock->GetMinPos().x
+						&& oldpos.y + PlayerMin.y < pBlock->GetPos().y + pBlock->GetMaxPos().y
+						&& oldpos.y + PlayerMax.y > pBlock->GetPos().y + pBlock->GetMinPos().y
+						)
+					{//当たり判定(Z)
+						PlayerPos.z = oldpos.z;
+						m_move.z = 0.0f;
+					}
+				}
+
+				if (oldpos.z + PlayerMin.z >= pBlock->GetPos().z + pBlock->GetMaxPos().z
+					&& PlayerPos.z + PlayerMin.z < pBlock->GetPos().z + pBlock->GetMaxPos().z)
+				{
+					if ( oldpos.x + PlayerMin.x < pBlock->GetPos().x + pBlock->GetMaxPos().x
+						&& oldpos.x + PlayerMax.x > pBlock->GetPos().x + pBlock->GetMinPos().x
+						&& oldpos.y + PlayerMin.y < pBlock->GetPos().y + pBlock->GetMaxPos().y
+						&& oldpos.y + PlayerMax.y > pBlock->GetPos().y + pBlock->GetMinPos().y
+						)
+					{//当たり判定(Z)
+						PlayerPos.z = oldpos.z;
+						m_move.z = 0.0f;
+					}
+				}
+				if (oldpos.y + PlayerMin.y >= pBlock->GetPos().y + pBlock->GetMaxPos().y
+					&& PlayerPos.y + PlayerMin.y < pBlock->GetPos().y + pBlock->GetMaxPos().y)
+				{//当たり判定(Y)上
+					if (oldpos.x + PlayerMin.x < pBlock->GetPos().x + pBlock->GetMaxPos().x
+						&& oldpos.x + PlayerMax.x > pBlock->GetPos().x + pBlock->GetMinPos().x
+						&& oldpos.z + PlayerMin.z < pBlock->GetPos().z + pBlock->GetMaxPos().z
+						&& oldpos.z + PlayerMax.z > pBlock->GetPos().z + pBlock->GetMinPos().z)
+					{
+						PlayerPos.y = oldpos.y;
+						m_bLanding = true; //着地
+						m_move.y = 0.0f;
+						m_nJumpCnt = 0; //ジャンプ数リセット
+					}
+				}
+				if (oldpos.y + PlayerMax.y <= pBlock->GetPos().y + pBlock->GetMinPos().y
+					&& PlayerPos.y + PlayerMax.y > pBlock->GetPos().y + pBlock->GetMinPos().y)
+				{//当たり判定(Y)下
+					if (oldpos.x + PlayerMin.x < pBlock->GetPos().x + pBlock->GetMaxPos().x
+						&& oldpos.x + PlayerMax.x > pBlock->GetPos().x + pBlock->GetMinPos().x
+						&& oldpos.z + PlayerMin.z < pBlock->GetPos().z + pBlock->GetMaxPos().z
+						&& oldpos.z + PlayerMax.z > pBlock->GetPos().z + pBlock->GetMinPos().z)
+					{
+						PlayerPos.y = oldpos.y;
+					}
 				}
 			}
+
+			//床との当たり判定
 			if (type == CObject::OBJECT_TYPE::OBJECT_TYPE_FIELD)
 			{
 				CField* pField = (CField*)pObj;
 				if (oldpos.y + PlayerMin.y >= pField->GetPos().y
-					&& PlayerPos.y + PlayerMin.y <= pField->GetPos().y
-					&& oldpos.x + PlayerMax.x < pField->GetPos().x + pField->GetSize().x + COLISION_CORRECTION
-					&& oldpos.x + PlayerMin.x > pField->GetPos().x - pField->GetSize().x - COLISION_CORRECTION
-					&& oldpos.z + PlayerMax.z < pField->GetPos().z + pField->GetSize().z + COLISION_CORRECTION
-					&& oldpos.z + PlayerMin.z > pField->GetPos().z - pField->GetSize().z - COLISION_CORRECTION
-					)
-				{//当たり判定(Y)
-					PlayerPos.y = oldpos.y;
-					m_move.y = 0.0f;
-					m_bLanding = true; //着地
-					m_nJumpCnt = 0; //ジャンプ数リセット
+					&& PlayerPos.y + PlayerMin.y <= pField->GetPos().y)
+				{
+					if (oldpos.x + PlayerMin.x < pField->GetPos().x + pField->GetSize().x
+						&& oldpos.x + PlayerMax.x > pField->GetPos().x - pField->GetSize().x
+						&& oldpos.z + PlayerMin.z < pField->GetPos().z + pField->GetSize().z
+						&& oldpos.z + PlayerMax.z > pField->GetPos().z - pField->GetSize().z)
+					{//当たり判定(Y)
+						PlayerPos.y = oldpos.y;
+						m_move.y = 0.0f;
+						m_bLanding = true; //着地
+						m_nJumpCnt = 0; //ジャンプ数リセット
+					}
 				}
+
+
 				
 			}
 		}
