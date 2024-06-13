@@ -237,7 +237,15 @@ void CPlayer::Gravity()
 void CPlayer::PlayerMove()
 {
 	CInputKeyboard* pKeyboard = CManager::GetKeyboard();
+	CInputMouse* pMouse = CManager::GetMouse();
 	D3DXVECTOR3 vecDirection(0.0f, 0.0f, 0.0f);
+
+	if (pMouse->GetTrigger(0))
+	{
+		m_move.y = DEFAULT_JUMP;
+		m_bLanding = false; //‹ó’†
+		m_nJumpCnt++; //ƒWƒƒƒ“ƒv”‰ÁŽZ	
+	}
 
 	if (pKeyboard->GetPress(DIK_W))
 	{

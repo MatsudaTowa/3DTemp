@@ -25,6 +25,9 @@ CRenderer*CManager::m_pRenderer = nullptr;
 //キーボード設定
 CInputKeyboard*CManager::m_pKeyboard = nullptr;
 
+//キーボード設定
+CInputMouse* CManager::m_pMouse = nullptr;
+
 //カメラ設定
 CCamera*CManager::m_pCamera = nullptr;
 
@@ -67,6 +70,16 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 		//キーボードの初期化処理
 		if (FAILED(m_pKeyboard->Init(hInstance, hWnd)))
+		{
+			return E_FAIL;
+		}
+	}
+	if (m_pMouse == nullptr)
+	{
+		m_pMouse = new CInputMouse();
+
+		//マウスの初期化処理
+		if (FAILED(m_pMouse->Init(hInstance, hWnd)))
 		{
 			return E_FAIL;
 		}
@@ -162,6 +175,8 @@ void CManager::Uninit()
 	m_pTexture->Unload();
 	//キーボードの終了処理
 	m_pKeyboard->Uninit();
+	//マウスの終了処理
+	m_pMouse->Uninit();
 }
 
 //=============================================
@@ -173,6 +188,7 @@ void CManager::Update()
 	m_pRenderer->Update();
 	m_pCamera->Update();
 	m_pKeyboard->Update();
+	m_pMouse->Update();
 	CObject::UpdateAll();
 }
 
@@ -201,6 +217,14 @@ CRenderer* CManager::GetRenderer()
 CInputKeyboard* CManager::GetKeyboard()
 {
 	return m_pKeyboard;
+}
+
+//=============================================
+//マウス情報取得
+//=============================================
+CInputMouse* CManager::GetMouse()
+{
+	return m_pMouse;
 }
 
 //=============================================

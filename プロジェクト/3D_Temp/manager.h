@@ -27,6 +27,8 @@ public:
 	static CRenderer*GetRenderer();
 	//キーボード情報取得
 	static CInputKeyboard* GetKeyboard();
+	//マウス情報取得
+	static CInputMouse* GetMouse();
 	//カメラ取得
 	static CCamera* GetCamera();
 	//ライト取得
@@ -36,6 +38,7 @@ public:
 private:
 	static CRenderer* m_pRenderer;
 	static CInputKeyboard* m_pKeyboard;
+	static CInputMouse* m_pMouse;
 	static CCamera* m_pCamera;
 	static CLight* m_pLight;
 	static CTexture* m_pTexture;
