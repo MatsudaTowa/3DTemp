@@ -16,7 +16,7 @@ LPDIRECT3DTEXTURE9 CBullet::m_pTextureTemp = nullptr;
 //=============================================
 //コンストラクタ
 //=============================================
-CBullet::CBullet(int nPriority):CObject2D(nPriority)
+CBullet::CBullet(int nPriority):CBillboard(nPriority)
 {
 }
 
@@ -33,10 +33,10 @@ CBullet::~CBullet()
 HRESULT CBullet::Init()
 {
 	//サイズ取得
-	D3DXVECTOR2 size = GetSize();
+	D3DXVECTOR3 size = GetSize();
 
 	//頂点設定
-	SetVtx(1.0f, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	SetVtx(D3DXVECTOR3(0.0f, 0.0f, -1.0f),D3DXCOLOR(1.0f,1.0f,1.0f,1.0f));
 
 	return S_OK;
 }
@@ -46,7 +46,7 @@ HRESULT CBullet::Init()
 //=============================================
 void CBullet::Uninit()
 {
-	CObject2D::Uninit();
+	CObject3D::Uninit();
 }
 
 //=============================================
@@ -55,12 +55,12 @@ void CBullet::Uninit()
 void CBullet::Update()
 {
 	D3DXVECTOR3 pos = GetPos();
-	//CEffect*pEffect = CEffect::Create(pos, D3DXVECTOR2(20.0f, 20.0f),D3DXCOLOR(1.0f,0.0f,0.0f,0.5f),30);
+	CEffect* pEffect = CEffect::Create(D3DXVECTOR3(pos.x, pos.y + 8.0f, pos.z), D3DXVECTOR3(10.0f, 10.0f, 0.0f), D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f), 30);
 	pos += m_move;
 	//座標を更新
 	SetPos(pos);
 	//頂点座標
-	SetVtx(1.0f, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	SetVtx(D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
 	HitBullet();
 
@@ -71,7 +71,7 @@ void CBullet::Update()
 	else
 	{
 		Release();
-		CExplosion*pExplosion = CExplosion::Create(pos,D3DXVECTOR2(20.0f,20.0f));
+		//CExplosion*pExplosion = CExplosion::Create(pos,D3DXVECTOR2(20.0f,20.0f));
 	}
 }
 
@@ -80,13 +80,13 @@ void CBullet::Update()
 //=============================================
 void CBullet::Draw()
 {
-	CObject2D::Draw();
+	CObject3D::Draw();
 }
 
 //=============================================
 //弾作成
 //=============================================
-CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR2 size,int nLife)
+CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size,int nLife)
 {
 	CBullet* pBullet = new CBullet;
 	if (pBullet != nullptr)
@@ -114,7 +114,7 @@ HRESULT CBullet::Load()
 	{
 		//テクスチャの読み込み
 		D3DXCreateTextureFromFile(pDevice,
-			"data\\TEXTURE\\download_image_1714032366975.png",
+			"data\\TEXTURE\\slash.png",
 			&m_pTextureTemp);
 	}
 	return S_OK;
@@ -139,7 +139,7 @@ void CBullet::HitBullet()
 {
 	D3DXVECTOR3 Bulletpos = GetPos();
 	//サイズ取得
-	D3DXVECTOR2 Bulletsize = GetSize();
+	D3DXVECTOR3 Bulletsize = GetSize();
 
 	for (int nCnt = 0; nCnt < MAX_OBJECT; nCnt++)
 	{

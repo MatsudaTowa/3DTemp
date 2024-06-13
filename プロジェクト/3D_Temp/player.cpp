@@ -131,6 +131,13 @@ void CPlayer::Update()
 	//Turn(); //‰ñ“]ˆ—
 	//SizeChange(); //Šgk
 
+	CInputMouse* pMouse = CManager::GetMouse();
+
+	if (pMouse->GetTrigger(0))
+	{
+		CBullet*pBullet = CBullet::Create(pos, D3DXVECTOR3(sinf(GetRot().y + D3DX_PI) * 7.0f, 0.0f, cosf(GetRot().y + D3DX_PI) * 7.0f),
+										D3DXVECTOR3(10.0f,10.0f,0.0f),30);
+	}
 
 }
 
@@ -237,15 +244,7 @@ void CPlayer::Gravity()
 void CPlayer::PlayerMove()
 {
 	CInputKeyboard* pKeyboard = CManager::GetKeyboard();
-	CInputMouse* pMouse = CManager::GetMouse();
 	D3DXVECTOR3 vecDirection(0.0f, 0.0f, 0.0f);
-
-	if (pMouse->GetTrigger(0))
-	{
-		m_move.y = DEFAULT_JUMP;
-		m_bLanding = false; //‹ó’†
-		m_nJumpCnt++; //ƒWƒƒƒ“ƒv”‰ÁŽZ	
-	}
 
 	if (pKeyboard->GetPress(DIK_W))
 	{

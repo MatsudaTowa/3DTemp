@@ -105,7 +105,7 @@ void CObject3D::Draw()
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
 
 	//位置を反映
-	D3DXMatrixTranslation(&mtxTrans, m_rot.x, m_rot.y, m_rot.z);
+	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
 
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
@@ -166,18 +166,19 @@ void CObject3D::SetVtx(D3DXVECTOR3 nor, D3DCOLOR col)
 	m_pVtxBuff->Lock(0, 0, reinterpret_cast<void**>(&pVtx), 0);
 
 	//頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x
-		, 0.0f
-		, m_pos.z + m_size.z);
-	pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_size.x
-		, 0.0f
-		, m_pos.z + m_size.z);
-	pVtx[2].pos = D3DXVECTOR3(m_pos.x - m_size.x
-		, 0.0f
-		, m_pos.z - m_size.z);
-	pVtx[3].pos = D3DXVECTOR3(m_pos.x + m_size.x
-		, 0.0f
-		, m_pos.z - m_size.z);
+	pVtx[0].pos = D3DXVECTOR3(-m_size.x
+		, m_size.y
+		, m_size.z);
+	pVtx[1].pos = D3DXVECTOR3(m_size.x
+		, m_size.y
+		, m_size.z);
+	pVtx[2].pos = D3DXVECTOR3(-m_size.x
+		, -m_size.y
+		, -m_size.z);
+	pVtx[3].pos = D3DXVECTOR3(m_size.x
+		, -m_size.y
+		, -m_size.z);
+
 
 	//rhwの設定
 	pVtx[0].nor = nor;
@@ -220,18 +221,18 @@ void CObject3D::SetVtx(D3DXVECTOR3 nor, float fAngle, float fLength, D3DCOLOR co
 
 
 	//頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(- m_size.x
+	pVtx[0].pos = D3DXVECTOR3(-m_size.x
 		, m_size.y
-		, 0.0f);
+		, m_size.z);
 	pVtx[1].pos = D3DXVECTOR3(m_size.x
 		, m_size.y
-		, 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(- m_size.x
-		, - m_size.y
-		, 0.0f);
+		, m_size.z);
+	pVtx[2].pos = D3DXVECTOR3(-m_size.x
+		, -m_size.y
+		, -m_size.z);
 	pVtx[3].pos = D3DXVECTOR3(m_size.x
 		, -m_size.y
-		, 0.0f);
+		, -m_size.z);
 
 	//rhwの設定
 	pVtx[0].nor = nor;
