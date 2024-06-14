@@ -14,6 +14,7 @@
 class CEffect : public CBillboard
 {
 public:
+	static const std::string TEXTURE_NAME;	//テクスチャの名前
 	static const int EFFECT_PRIORITY = 3; //描画順
 	static const int TEX_SPLIT_X; //テクスチャの分割数
 	static const int TEX_SPLIT_Y; //テクスチャの分割数
@@ -27,7 +28,6 @@ public:
 
 	//エフェクト作成
 	static CEffect* Create(D3DXVECTOR3 pos, D3DXVECTOR3 size,D3DXCOLOR col,int nLife);
-	static HRESULT Load(); //テクスチャのロード
 	static HRESULT UnLoad(); //テクスチャのアンロード
 private:
 	static LPDIRECT3DTEXTURE9 m_pTextureTemp;

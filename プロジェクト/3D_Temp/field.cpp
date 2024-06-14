@@ -7,6 +7,8 @@
 #include "field.h"
 #include "manager.h"
 
+//texパス
+const std::string CField::TEXTURE_NAME = "data\\TEXTURE\\images (2).jpg";
 //テクスチャ初期化
 LPDIRECT3DTEXTURE9 CField::m_pTextureTemp = nullptr;
 
@@ -67,34 +69,19 @@ void CField::Draw()
 //=============================================
 CField* CField::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot)
 {
+	CTexture* pTexture = CManager::GetTexture();
+
 	CField* pField = new CField;
 	if (pField != nullptr)
 	{
 		pField->SetPos(pos); //pos設定
 		pField->SetSize(size); //サイズ設定
-		pField->BindTexture(m_pTextureTemp);
+		pField->BindTexture(pTexture->GetAddress(pTexture->Regist(&TEXTURE_NAME)));
 		pField->SetType(OBJECT_TYPE_FIELD); //タイプ設定
 		pField->Init();
 	}
 
 	return pField;
-}
-
-//=============================================
-//テクスチャロード
-//=============================================
-HRESULT CField::Load()
-{
-	CRenderer* pRender = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
-	if (m_pTextureTemp == nullptr)
-	{
-		//テクスチャの読み込み
-		D3DXCreateTextureFromFile(pDevice,
-			"data\\TEXTURE\\images (2).jpg",
-			&m_pTextureTemp);
-	}
-	return S_OK;
 }
 
 //=============================================

@@ -109,13 +109,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	CExplosion::Load();
 
-	CEffect::Load();
-
 	CEnemy::Load();
 
 	CBlock::Load();
-
-	CField::Load();
 
 	CPlayer::Load();
 
@@ -165,6 +161,13 @@ void CManager::Uninit()
 	CPlayer::UnLoad();
 
 	CObject::ReleaseAll();
+	//if (m_pTexture != nullptr)
+	//{
+	//	m_pTexture->Unload();
+	//	delete m_pTexture;
+	//	m_pTexture = nullptr;
+	//}
+
 	if (m_pRenderer != nullptr)
 	{
 		m_pRenderer->Uninit();

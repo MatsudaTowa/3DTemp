@@ -14,6 +14,9 @@ const int CEffect::TEX_SPLIT_Y = 1;
 //画像切り替わりカウント
 const int CEffect::ANIMATION_FRAME = 5;
 
+//texパス
+const std::string CEffect::TEXTURE_NAME = "data\\TEXTURE\\effect000.jpg";
+
 //テクスチャ初期化
 LPDIRECT3DTEXTURE9 CEffect::m_pTextureTemp = nullptr;
 
@@ -142,12 +145,14 @@ void CEffect::Draw()
 //=============================================
 CEffect* CEffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXCOLOR col, int nLife)
 {
+	CTexture* pTexture = CManager::GetTexture();
+
 	CEffect* pEffect = new CEffect;
 	if (pEffect != nullptr)
 	{
 		pEffect->SetPos(pos); //pos設定
 		pEffect->SetSize(size); //サイズ設定
-		pEffect->BindTexture(m_pTextureTemp);
+		pEffect->BindTexture(pTexture->GetAddress(pTexture->Regist(&TEXTURE_NAME)));
 		pEffect->m_col = col;
 		pEffect->m_nLife = nLife;
 		pEffect->SetType(OBJECT_TYPE_EFFECT);
@@ -155,23 +160,6 @@ CEffect* CEffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXCOLOR col, int n
 	}
 
 	return pEffect;
-}
-
-//=============================================
-//テクスチャロード
-//=============================================
-HRESULT CEffect::Load()
-{
-	CRenderer* pRender = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
-	if (m_pTextureTemp == nullptr)
-	{
-		//テクスチャの読み込み
-		D3DXCreateTextureFromFile(pDevice,
-			"data\\TEXTURE\\effect000.jpg",
-			&m_pTextureTemp);
-	}
-	return S_OK;
 }
 
 //=============================================

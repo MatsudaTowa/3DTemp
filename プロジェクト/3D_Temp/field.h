@@ -14,6 +14,8 @@
 class CField : public CObject3D
 {
 public:
+	static const std::string TEXTURE_NAME;	//テクスチャの名前
+
 	static const int FIELD_PRIORITY = 3; //描画順
 
 	CField(int nPriority = FIELD_PRIORITY);
