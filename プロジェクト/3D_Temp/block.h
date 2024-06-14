@@ -13,6 +13,8 @@
 class CBlock : public CObjectX
 {
 public:
+	static const std::string MODEL_NAME;	//モデルの名前
+
 	static const int BLOCK_PRIORITY = 3; //描画順
 	typedef enum
 	{
@@ -30,8 +32,6 @@ public:
 	void Draw()override;
 	//ブロック作成
 	static CBlock* Create(BLOCKTYPE type,D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nLife,bool bBreak);
-	static HRESULT Load(); //テクスチャのロード
-	static HRESULT UnLoad(); //テクスチャのアンロード
 private:
 
 	BLOCKTYPE m_type;

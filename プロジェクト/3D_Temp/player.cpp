@@ -12,6 +12,9 @@
 #include "effect.h"
 #include "field.h"
 
+//モデルパス
+const std::string CPlayer::MODEL_NAME = "data\\MODEL\\sphere.x";
+
 //通常の移動速度
 const float CPlayer::DEFAULT_MOVE = 0.5f;
 //通常の移動速度
@@ -71,8 +74,6 @@ HRESULT CPlayer::Init()
 	//	&pTex);
 
 	//CObjectX::BindTexture(pTex);
-
-	CObjectX::BindXFile(m_pBuffMat, m_dwNumMat, m_pMesh);
 
 
 	m_bSize = false;
@@ -154,69 +155,20 @@ void CPlayer::Draw()
 //=============================================
 CPlayer* CPlayer::Create(D3DXVECTOR3 pos,D3DXVECTOR3 rot)
 {
+	CModel* pModel = CManager::GetModel();
+
 	CPlayer* pPlayer = new CPlayer;
 	pPlayer->SetPos(pos); //pos設定
 	pPlayer->SetRot(rot); //pos設定
+	pPlayer->BindXFile(pModel->GetModelInfo(pModel->Regist(&MODEL_NAME)).pBuffMat,
+					pModel->GetModelInfo(pModel->Regist(&MODEL_NAME)).dwNumMat,
+					pModel->GetModelInfo(pModel->Regist(&MODEL_NAME)).pMesh);
 	pPlayer->SetType(OBJECT_TYPE_PLAYER); //タイプ設定
 	pPlayer->Init();
 	
 	return pPlayer;
 }
 
-//=============================================
-//ロード
-//=============================================
-HRESULT CPlayer::Load()
-{
-	CRenderer* pRender = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
-	//if (m_pTextureTemp == nullptr)
-	//{
-	//	//テクスチャの読み込み
-	//	D3DXCreateTextureFromFile(pDevice,
-	//		"data\\TEXTURE\\download_image_1714032505054.png",
-	//		&m_pTextureTemp);
-	//}
-	if (m_pBuffMat == nullptr && m_pMesh == nullptr)
-	{
-		//Xファイルの読み込み
-		D3DXLoadMeshFromX("data\\MODEL\\sphere.x",
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_pBuffMat,
-			NULL,
-			&m_dwNumMat,
-			&m_pMesh);
-	}
-	return S_OK;
-}
-
-//=============================================
-//anロード
-//=============================================
-HRESULT CPlayer::UnLoad()
-{
-	if (m_pTextureTemp != nullptr)
-	{
-
-		m_pTextureTemp->Release();
-		m_pTextureTemp = nullptr;
-	}
-	if (m_pBuffMat != nullptr)
-	{
-
-		m_pBuffMat->Release();
-		m_pBuffMat = nullptr;
-	}
-	if (m_pMesh != nullptr)
-	{
-
-		m_pMesh->Release();
-		m_pMesh = nullptr;
-	}
-	return S_OK;
-}
 //=============================================
 //リスポーン
 //=============================================

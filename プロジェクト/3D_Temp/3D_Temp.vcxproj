@@ -166,6 +166,7 @@
     <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
+    <ClCompile Include="model.cpp" />
     <ClCompile Include="move_texture.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="object2D.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
+    <ClInclude Include="model.h" />
     <ClInclude Include="move_texture.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="object2D.h" />

@@ -20,7 +20,6 @@ public:
 	void Draw()override;
 	//弾作成
 	static CBullet* Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, D3DXVECTOR3 size,int nLife);
-	static HRESULT UnLoad(); //テクスチャのアンロード
 private:
 	void HitBullet();
 	D3DXVECTOR3 m_move;

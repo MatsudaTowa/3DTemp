@@ -83,18 +83,3 @@ CField* CField::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot)
 
 	return pField;
 }
-
-//=============================================
-//テクスチャアンロード
-//=============================================
-HRESULT CField::UnLoad()
-{
-	if (m_pTextureTemp != nullptr)
-	{
-
-		m_pTextureTemp->Release();
-		m_pTextureTemp = nullptr;
-	}
-
-	return S_OK;
-}

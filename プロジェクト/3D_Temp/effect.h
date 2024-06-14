@@ -28,7 +28,6 @@ public:
 
 	//エフェクト作成
 	static CEffect* Create(D3DXVECTOR3 pos, D3DXVECTOR3 size,D3DXCOLOR col,int nLife);
-	static HRESULT UnLoad(); //テクスチャのアンロード
 private:
 	static LPDIRECT3DTEXTURE9 m_pTextureTemp;
 	D3DXCOLOR m_col;

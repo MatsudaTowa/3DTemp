@@ -161,18 +161,3 @@ CEffect* CEffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXCOLOR col, int n
 
 	return pEffect;
 }
-
-//=============================================
-//テクスチャアンロード
-//=============================================
-HRESULT CEffect::UnLoad()
-{
-	if (m_pTextureTemp != nullptr)
-	{
-
-		m_pTextureTemp->Release();
-		m_pTextureTemp = nullptr;
-	}
-
-	return S_OK;
-}

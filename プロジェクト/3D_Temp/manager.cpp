@@ -37,6 +37,8 @@ CLight*CManager::m_pLight = nullptr;
 //テクスチャ設定
 CTexture* CManager::m_pTexture = nullptr;
 
+//モデル設定
+CModel* CManager::m_pModel = nullptr;
 
 //=============================================
 //コンストラクタ
@@ -104,16 +106,12 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	{
 		m_pTexture = new CTexture();
 	}
-	
-	//読み込み
 
-	CExplosion::Load();
-
-	CEnemy::Load();
-
-	CBlock::Load();
-
-	CPlayer::Load();
+	//モデル生成
+	if (m_pModel == nullptr)
+	{
+		m_pModel = new CModel();
+	}
 
 	////背景生成
 	//CBg* pBg = CBg::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0));
@@ -146,27 +144,25 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 void CManager::Uninit()
 {
 	//破棄
-	CBullet::UnLoad();
-
-	CExplosion::UnLoad();
-
-	CEffect::UnLoad();
 
 	CEnemy::UnLoad();
 
-	CBlock::UnLoad();
-
-	CField::UnLoad();
-
-	CPlayer::UnLoad();
 
 	CObject::ReleaseAll();
-	//if (m_pTexture != nullptr)
-	//{
-	//	m_pTexture->Unload();
-	//	delete m_pTexture;
-	//	m_pTexture = nullptr;
-	//}
+
+	if (m_pTexture != nullptr)
+	{
+		m_pTexture->Unload();
+		delete m_pTexture;
+		m_pTexture = nullptr;
+	}
+
+	if (m_pModel != nullptr)
+	{
+		m_pModel->Unload();
+		delete m_pModel;
+		m_pModel = nullptr;
+	}
 
 	if (m_pRenderer != nullptr)
 	{
@@ -174,7 +170,6 @@ void CManager::Uninit()
 		delete m_pRenderer;
 		m_pRenderer = nullptr;
 	}
-	m_pTexture->Unload();
 	//キーボードの終了処理
 	m_pKeyboard->Uninit();
 	//マウスの終了処理
@@ -251,4 +246,12 @@ CLight* CManager::GetLight()
 CTexture* CManager::GetTexture()
 {
 	return m_pTexture;
+}
+
+//=============================================
+//モデル取得
+//=============================================
+CModel* CManager::GetModel()
+{
+	return m_pModel;
 }

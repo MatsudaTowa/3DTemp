@@ -7,6 +7,8 @@
 #include "explosion.h"
 #include "manager.h"
 
+//texパス
+const std::string CExplosion::TEXTURE_NAME = "data\\TEXTURE\\explosion.png";
 //画像分割数
 const int CExplosion::TEX_SPLIT_X = 4;
 //画像分割数
@@ -106,47 +108,17 @@ void CExplosion::Draw()
 //=============================================
 CExplosion* CExplosion::Create(D3DXVECTOR3 pos, D3DXVECTOR2 size)
 {
+	CTexture* pTexture = CManager::GetTexture();
+
 	CExplosion* pExplosion = new CExplosion;
 	if (pExplosion != nullptr)
 	{
 		pExplosion->SetPos(pos); //pos設定
 		pExplosion->SetSize(size); //サイズ設定
-		pExplosion->BindTexture(m_pTextureTemp);
+		pExplosion->BindTexture(pTexture->GetAddress(pTexture->Regist(&TEXTURE_NAME)));
 		pExplosion->SetType(OBJECT_TYPE_EFFECT); //タイプ設定
 		pExplosion->Init();
 	}
 
 	return pExplosion;
-}
-
-//=============================================
-//テクスチャロード
-//=============================================
-HRESULT CExplosion::Load()
-{
-	CRenderer* pRender = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
-	if (m_pTextureTemp == nullptr)
-	{
-		//テクスチャの読み込み
-		D3DXCreateTextureFromFile(pDevice,
-			"data\\TEXTURE\\explosion.png",
-			&m_pTextureTemp);
-	}
-	return S_OK;
-}
-
-//=============================================
-//テクスチャアンロード
-//=============================================
-HRESULT CExplosion::UnLoad()
-{
-	if (m_pTextureTemp != nullptr)
-	{
-
-		m_pTextureTemp->Release();
-		m_pTextureTemp = nullptr;
-	}
-
-	return S_OK;
 }

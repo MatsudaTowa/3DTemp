@@ -106,21 +106,6 @@ CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size,int
 	return pBullet;
 }
 
-//=============================================
-//テクスチャアンロード
-//=============================================
-HRESULT CBullet::UnLoad()
-{
-	if (m_pTextureTemp != nullptr)
-	{
-
-   		m_pTextureTemp->Release();
-		m_pTextureTemp = nullptr;
-	}
-
-	return S_OK;
-}
-
 void CBullet::HitBullet()
 {
 	D3DXVECTOR3 Bulletpos = GetPos();

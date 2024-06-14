@@ -9,6 +9,9 @@
 #include "explosion.h"
 #include "player.h"
 
+//モデルパス
+const std::string CBlock::MODEL_NAME = "data\\MODEL\\box.x";
+
 //テクスチャ初期化
 LPDIRECT3DTEXTURE9 CBlock::m_pTextureTemp = nullptr;
 
@@ -69,6 +72,8 @@ void CBlock::Draw()
 //=============================================
 CBlock* CBlock::Create(BLOCKTYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nLife, bool bBreak)
 {
+	CModel* pModel = CManager::GetModel();
+
 	CBlock* pBlock = new CBlock;
 	if (pBlock != nullptr)
 	{
@@ -77,69 +82,15 @@ CBlock* CBlock::Create(BLOCKTYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nLi
 		pBlock->SetRot(rot); //pos設定
 		pBlock->m_nLife = nLife; //寿命代入
 		pBlock->m_bBreak = bBreak; //壊せるかどうか
-		pBlock->BindTexture(m_pTextureTemp);
-		pBlock->BindXFile(m_pBuffMat, m_dwNumMat, m_pMesh);
+		//pBlock->BindTexture(m_pTextureTemp);
+		pBlock->BindXFile(pModel->GetModelInfo(pModel->Regist(&MODEL_NAME)).pBuffMat,
+			pModel->GetModelInfo(pModel->Regist(&MODEL_NAME)).dwNumMat,
+			pModel->GetModelInfo(pModel->Regist(&MODEL_NAME)).pMesh);
 		pBlock->SetType(OBJECT_TYPE_BLOCK); //タイプ設定
 		pBlock->Init();
 	}
 
 	return pBlock;
-}
-
-//=============================================
-//テクスチャロード
-//=============================================
-HRESULT CBlock::Load()
-{
-	CRenderer* pRender = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
-	//if (m_pTextureTemp == nullptr)
-	//{
-	//	//テクスチャの読み込み
-	//	D3DXCreateTextureFromFile(pDevice,
-	//		"data\\TEXTURE\\ground000.png",
-	//		&m_pTextureTemp);
-	//}
-	if (m_pBuffMat == nullptr && m_pMesh == nullptr)
-	{
-		//Xファイルの読み込み
-		D3DXLoadMeshFromX("data\\MODEL\\box.x",
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_pBuffMat,
-			NULL,
-			&m_dwNumMat,
-			&m_pMesh);
-	}
-	return S_OK;
-}
-
-//=============================================
-//テクスチャアンロード
-//=============================================
-HRESULT CBlock::UnLoad()
-{
-	if (m_pTextureTemp != nullptr)
-	{
-
-		m_pTextureTemp->Release();
-		m_pTextureTemp = nullptr;
-	}
-	if (m_pBuffMat != nullptr)
-	{
-
-		m_pBuffMat->Release();
-		m_pBuffMat = nullptr;
-	}
-	if (m_pMesh != nullptr)
-	{
-
-		m_pMesh->Release();
-		m_pMesh = nullptr;
-	}
-
-	return S_OK;
 }
 
 //=============================================
