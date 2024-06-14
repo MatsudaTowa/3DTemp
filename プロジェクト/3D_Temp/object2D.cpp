@@ -63,7 +63,7 @@ void CObject2D::Uninit()
 	if (m_pTexture != nullptr)
 	{
 
-		m_pTexture->Release();
+		//m_pTexture->Release();
 		m_pTexture = nullptr;
 	}
 

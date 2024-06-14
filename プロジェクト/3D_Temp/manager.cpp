@@ -106,7 +106,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	}
 	
 	//ì«Ç›çûÇ›
-	CBullet::Load();
 
 	CExplosion::Load();
 

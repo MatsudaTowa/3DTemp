@@ -20,7 +20,7 @@ public:
 	LPDIRECT3DTEXTURE9 GetAddress(int nIdx);
 private:
 	LPDIRECT3DTEXTURE9 m_apTexture[MAX_TEX]; //テクスチャへのポインタ
-	const std::string* m_texName; //テクスチャネーム保存用
+	std::string* m_texName[MAX_TEX]; //テクスチャネーム保存用
 	int m_nNumAll; //テクスチャ総数
 };
 #endif

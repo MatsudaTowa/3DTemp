@@ -12,12 +12,14 @@
 
 //テクスチャ初期化
 LPDIRECT3DTEXTURE9 CBullet::m_pTextureTemp = nullptr;
+const std::string CBullet::TEXTURE_NAME ="data\\TEXTURE\\slash.png";
 
 //=============================================
 //コンストラクタ
 //=============================================
 CBullet::CBullet(int nPriority):CBillboard(nPriority)
 {
+	
 }
 
 //=============================================
@@ -55,7 +57,7 @@ void CBullet::Uninit()
 void CBullet::Update()
 {
 	D3DXVECTOR3 pos = GetPos();
-	CEffect* pEffect = CEffect::Create(D3DXVECTOR3(pos.x, pos.y + 8.0f, pos.z), D3DXVECTOR3(10.0f, 10.0f, 0.0f), D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f), 30);
+	//CEffect* pEffect = CEffect::Create(D3DXVECTOR3(pos.x, pos.y + 8.0f, pos.z), D3DXVECTOR3(10.0f, 10.0f, 0.0f), D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f), 30);
 	pos += m_move;
 	//座標を更新
 	SetPos(pos);
@@ -88,6 +90,7 @@ void CBullet::Draw()
 //=============================================
 CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size,int nLife)
 {
+	CTexture* pTexture = CManager::GetTexture();
 	CBullet* pBullet = new CBullet;
 	if (pBullet != nullptr)
 	{
@@ -95,29 +98,12 @@ CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size,int
 		pBullet->SetSize(size); //サイズ設定
 		pBullet->m_move = move; //移動量代入
 		pBullet->m_nLife = nLife; //寿命代入
-     	pBullet->BindTexture(m_pTextureTemp);
+     	pBullet->BindTexture(pTexture->GetAddress(pTexture->Regist(&TEXTURE_NAME)));
 		pBullet->SetType(OBJECT_TYPE_BULLET); //タイプ設定
 		pBullet->Init();
 	}
 
 	return pBullet;
-}
-
-//=============================================
-//テクスチャロード
-//=============================================
-HRESULT CBullet::Load()
-{
-	CRenderer* pRender = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
-	if (m_pTextureTemp == nullptr)
-	{
-		//テクスチャの読み込み
-		D3DXCreateTextureFromFile(pDevice,
-			"data\\TEXTURE\\slash.png",
-			&m_pTextureTemp);
-	}
-	return S_OK;
 }
 
 //=============================================

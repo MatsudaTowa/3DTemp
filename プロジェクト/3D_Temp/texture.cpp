@@ -5,6 +5,7 @@
 //
 //=============================================
 #include "texture.h"
+#include "manager.h"
 
 //=============================================
 //コンストラクタ
@@ -15,7 +16,6 @@ CTexture::CTexture()
 	{
 		m_apTexture[nCnt] = nullptr;
 	}
-	m_texName = nullptr;
 
 	m_nNumAll = 0;
 }
@@ -39,9 +39,10 @@ void CTexture::Unload()
 
 			m_apTexture[nCnt]->Release();
 			m_apTexture[nCnt] = nullptr;
+			m_texName[nCnt] = nullptr;
+
 		}
 	}
-	m_texName = nullptr;
 	m_nNumAll = 0;
 
 }
@@ -56,11 +57,18 @@ int CTexture::Regist(const std::string* pTex)
 	{
 		if (m_apTexture[nCnt] == nullptr)
 		{
+			LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+
+			//テクスチャの読み込み
+			D3DXCreateTextureFromFile(pDevice,
+				pTex->c_str(),
+				&m_apTexture[nCnt]);
+
 			nIdx = nCnt;
 			m_nNumAll++;
 			break;
 		}
-		else if (m_texName == pTex)
+		else if (m_texName[m_nNumAll] == pTex)
 		{
 			nIdx = nCnt;
 			break;

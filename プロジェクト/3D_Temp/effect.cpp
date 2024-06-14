@@ -58,7 +58,7 @@ HRESULT CEffect::Init()
 	tex_pos.y = 1.0f;
 	//テクスチャ座標代入
 	SetTexPos(tex_pos);
-
+	
 	////アニメーションフレーム代入
 	//SetAnimFrame(ANIMATION_FRAME);
 
@@ -95,6 +95,7 @@ void CEffect::Update()
 	else
 	{
 		Release();
+		return;
 	}
 	SetSize(size);
 	//対角線

@@ -10,7 +10,8 @@
 class CBullet : public CBillboard
 {
 public:
-	static const int BULLET_PRIORITY = 3; //描画順
+	static const std::string TEXTURE_NAME;	//テクスチャの名前
+	static const int BULLET_PRIORITY = 4; //描画順
 	CBullet(int nPriority = BULLET_PRIORITY);
 	~CBullet()override;
 	HRESULT Init()override;
@@ -19,7 +20,6 @@ public:
 	void Draw()override;
 	//弾作成
 	static CBullet* Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, D3DXVECTOR3 size,int nLife);
-	static HRESULT Load(); //テクスチャのロード
 	static HRESULT UnLoad(); //テクスチャのアンロード
 private:
 	void HitBullet();
