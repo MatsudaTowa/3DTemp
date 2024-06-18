@@ -13,6 +13,7 @@
 #include "light.h"
 #include "texture.h"
 #include "model.h"
+#include "scene.h"
 
 class CManager
 {
@@ -24,6 +25,8 @@ public:
 	void Update();
 	void Draw();
 
+	//シーン設定
+	static void SetMode(CScene::MODE mode);
 	//レンダラー取得
 	static CRenderer*GetRenderer();
 	//キーボード情報取得
@@ -39,6 +42,7 @@ public:
 	//モデル取得
 	static CModel* GetModel();
 private:
+	static CScene* m_pScene; //現在のシーン
 	static CRenderer* m_pRenderer;
 	static CInputKeyboard* m_pKeyboard;
 	static CInputMouse* m_pMouse;

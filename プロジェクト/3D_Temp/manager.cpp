@@ -6,18 +6,9 @@
 //=============================================
 #include "manager.h"
 #include "renderer.h"
-#include "object.h"
-#include "object2D.h"
-#include "object3D.h"
-#include "objectX.h"
-#include "player.h"
-#include "bg.h"
-#include "bullet.h"
-#include "explosion.h"
-#include "effect.h"
-#include "enemy.h"
-#include "block.h"
-#include "field.h"
+
+//シーン設定
+CScene* CManager::m_pScene = nullptr;
 
 //レンダラー設定
 CRenderer*CManager::m_pRenderer = nullptr;
@@ -113,27 +104,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		m_pModel = new CModel();
 	}
 
-	////背景生成
-	//CBg* pBg = CBg::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0));
-
-	////プレイヤー生成
-	//CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.25f, SCREEN_HEIGHT * 0.25f, 0.0f),D3DXVECTOR2(50.0f, 100.0f));
-
-	//CEnemy* pEnemy = CEnemy::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.25f, SCREEN_HEIGHT * 0.25f, 0.0f), 
-	//								D3DXVECTOR3(2.0f, 2.0f, 0.0f),D3DXVECTOR2(70.0f, 100.0f),1);
-
-	CBlock* pBlock = CBlock::Create(CBlock::BLOCKTYPE_DEFAULT,D3DXVECTOR3(0.0,0.0f,0.0f),
-									D3DXVECTOR3(0.0f, 0.0f, 0.0f),3,false);
-
-	pBlock = CBlock::Create(CBlock::BLOCKTYPE_DEFAULT, D3DXVECTOR3(10.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3, false);
-
-	pBlock = CBlock::Create(CBlock::BLOCKTYPE_DEFAULT, D3DXVECTOR3(5.0f, 50.0f, 0.0f),
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3, false);
-	
-	CField*pField = CField::Create(D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXVECTOR3(100.0f,0.0f,100.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
-
-	CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(50.0f,0.5f,0.0f),D3DXVECTOR3(0.0f,0.0f,0.0f));
+	//最初のシーン設定
+	SetMode(CScene::MODE::MODE_TITLE);
 
 	return S_OK;
 }
@@ -143,13 +115,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 //=============================================
 void CManager::Uninit()
 {
-	//破棄
-
-	CEnemy::UnLoad();
-
-
-	CObject::ReleaseAll();
-
 	if (m_pTexture != nullptr)
 	{
 		m_pTexture->Unload();
@@ -186,7 +151,8 @@ void CManager::Update()
 	m_pCamera->Update();
 	m_pKeyboard->Update();
 	m_pMouse->Update();
-	CObject::UpdateAll();
+	//シーンの更新
+	m_pScene->Update();
 }
 
 //=============================================
@@ -197,7 +163,29 @@ void CManager::Draw()
 	//描画処理
 	m_pRenderer->Draw();
 
-	//g_pRenderer->DrawFPS(nCntFPS);
+	//シーンの描画
+	m_pScene->Draw();
+}
+
+//=============================================
+//シーン設定
+//=============================================
+void CManager::SetMode(CScene::MODE mode)
+{
+	//シーン終了
+	if (m_pScene != nullptr)
+	{
+		m_pScene->Uninit();
+		delete m_pScene;
+		m_pScene = nullptr;
+
+	}
+
+	//シーン切り替え
+	if (m_pScene == nullptr)
+	{
+		m_pScene = CScene::Create(mode);
+	}
 }
 
 //=============================================

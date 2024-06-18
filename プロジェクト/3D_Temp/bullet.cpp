@@ -106,6 +106,9 @@ CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size,int
 	return pBullet;
 }
 
+//=============================================
+//’e‚Æ‚Ì“–‚½‚è”»’è
+//=============================================
 void CBullet::HitBullet()
 {
 	D3DXVECTOR3 Bulletpos = GetPos();
