@@ -178,7 +178,6 @@ void CManager::SetMode(CScene::MODE mode)
 		m_pScene->Uninit();
 		delete m_pScene;
 		m_pScene = nullptr;
-
 	}
 
 	//ƒV[ƒ“Ø‚è‘Ö‚¦

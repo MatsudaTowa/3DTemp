@@ -13,7 +13,7 @@ const std::string CResult_Screen::TEXTURE_NAME = "data\\TEXTURE\\result_test.png
 //=============================================
 //コンストラクタ
 //=============================================
-CResult_Screen::CResult_Screen(int nPriority)
+CResult_Screen::CResult_Screen(int nPriority) :CObject2D(nPriority)
 {
 }
 

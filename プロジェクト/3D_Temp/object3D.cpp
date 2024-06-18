@@ -66,7 +66,6 @@ void CObject3D::Uninit()
 		m_pTexture = nullptr;
 	}
 
-
 	//頂点バッファの破棄
 	if (m_pVtxBuff != nullptr)
 	{

@@ -15,7 +15,7 @@ class CResult_Screen : public CObject2D
 {
 public:
 	static const std::string TEXTURE_NAME;	//テクスチャの名前
-	static const int RESULT_SCREEN_PRIORITY = 1;  //描画順
+	static const int RESULT_SCREEN_PRIORITY = 90;  //描画順
 	CResult_Screen(int nPriority = RESULT_SCREEN_PRIORITY);
 	~CResult_Screen()override;
 	HRESULT Init()override;

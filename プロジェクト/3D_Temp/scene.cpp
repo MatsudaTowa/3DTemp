@@ -28,6 +28,7 @@ CScene::~CScene()
 //=============================================
 HRESULT CScene::Init()
 {
+
     return E_NOTIMPL;
 }
 

@@ -15,7 +15,7 @@ const std::string CTitle_Screen::TEXTURE_NAME = "data\\TEXTURE\\title_test.png";
 //=============================================
 //コンストラクタ
 //=============================================
-CTitle_Screen::CTitle_Screen(int nPriority)
+CTitle_Screen::CTitle_Screen(int nPriority):CObject2D(nPriority)
 {
 }
 
